@@ -71,27 +71,33 @@ body {
     flex: 1;
     margin: 0 80px;
     min-height: 500px;
+    overflow: hidden;
 }
 
 /* Background layers */
 .bg-layer {
     position: absolute;
-    left: 50%;
-    width: 90%;
+    left: 0;
+    right: 0;
     pointer-events: none;
 }
 
 .bg-ocean {
-    top: 0;
-    transform: translateX(-50%) translateY(calc(-65% + 110px));
-    z-index: -3;
+    bottom: 50px;
+    height: 120px;
+    width: 100%;
+    object-fit: cover;
+    object-position: top center;
+    z-index: 0;
 }
 
 .bg-trees {
-    top: 0;
-    transform: translateX(-50%) translateY(calc(-65% - 70px));
+    bottom: 50px;
+    height: 100px;
     width: 100%;
-    z-index: -1;
+    object-fit: cover;
+    object-position: top center;
+    z-index: 1;
 }
 
 /* Cloud Borders */

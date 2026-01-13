@@ -37,7 +37,7 @@ add_action('after_setup_theme', 'poptropica_club_setup');
 
 // Enqueue styles and scripts
 function poptropica_club_scripts() {
-    wp_enqueue_style('poptropica-club-style', get_stylesheet_uri(), array(), '1.0');
+    wp_enqueue_style('poptropica-club-style', get_stylesheet_uri(), array(), '1.2');
 
     // Google Fonts (optional)
     wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap', array(), null);
