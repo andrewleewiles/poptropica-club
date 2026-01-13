@@ -69,35 +69,35 @@ body {
 .cloud-container {
     position: relative;
     flex: 1;
-    margin: 0 80px;
+    margin: 0 auto;
+    max-width: 1000px;
     min-height: 500px;
-    overflow: hidden;
 }
 
-/* Background layers */
+/* Background layers - behind cloud top */
 .bg-layer {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     pointer-events: none;
 }
 
 .bg-ocean {
-    bottom: 50px;
-    height: 120px;
-    width: 100%;
+    top: -80px;
+    height: 200px;
+    width: 90%;
     object-fit: cover;
-    object-position: top center;
-    z-index: 0;
+    object-position: bottom center;
+    z-index: -2;
 }
 
 .bg-trees {
-    bottom: 50px;
-    height: 100px;
-    width: 100%;
+    top: -40px;
+    height: 150px;
+    width: 95%;
     object-fit: cover;
-    object-position: top center;
-    z-index: 1;
+    object-position: bottom center;
+    z-index: -1;
 }
 
 /* Cloud Borders */
