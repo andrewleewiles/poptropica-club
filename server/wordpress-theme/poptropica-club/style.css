@@ -71,6 +71,7 @@ body {
     flex: 1;
     margin: 0 80px;
     min-height: 500px;
+    overflow: hidden;
 }
 
 /* Background layers */
@@ -82,17 +83,19 @@ body {
 }
 
 .bg-ocean {
-    bottom: 60px;
+    bottom: 0;
     left: 0;
-    height: auto;
+    height: 200px;
     object-fit: cover;
+    object-position: top;
 }
 
 .bg-trees {
-    bottom: 60px;
+    bottom: 0;
     left: 0;
-    height: auto;
+    height: 150px;
     object-fit: cover;
+    object-position: top;
 }
 
 /* Cloud Borders */
