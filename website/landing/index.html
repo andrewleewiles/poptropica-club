@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messy Sinker's Poptropica Club</title>
+    <meta name="description" content="Welcome to Poptropica Club! Download Poptropica Legacy, join our community, and explore the islands.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="../shared/logo.png">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header with Logo -->
+        <header class="header">
+            <div id="logo-container" class="logo" role="img" aria-label="Messy Sinker's Poptropica Club"></div>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="main-container">
+            <!-- Cloud Container -->
+            <div class="cloud-container">
+                <!-- Background layers behind clouds -->
+                <img src="../shared/ocean.png" alt="" class="bg-layer bg-ocean" aria-hidden="true">
+                <div class="islands-container">
+                    <img src="" alt="" class="island island-1" aria-hidden="true">
+                    <img src="" alt="" class="island island-2" aria-hidden="true">
+                    <img src="" alt="" class="island island-3" aria-hidden="true">
+                </div>
+                <img src="../shared/trees.png" alt="" class="bg-layer bg-trees" aria-hidden="true">
+
+                <!-- Cloud borders -->
+                <img src="../shared/cloudTop.png" alt="" class="cloud-border cloud-top" aria-hidden="true">
+                <img src="../shared/cloudBottom.png" alt="" class="cloud-border cloud-bottom" aria-hidden="true">
+                <img src="../shared/cloudLeft.png" alt="" class="cloud-border cloud-left" aria-hidden="true">
+                <img src="../shared/cloudRight.png" alt="" class="cloud-border cloud-right" aria-hidden="true">
+
+                <!-- Content inside cloud -->
+                <div class="cloud-content">
+                    <!-- Character -->
+                    <div class="character-section">
+                        <img src="messy.png" alt="Messy Sinker" class="character-img">
+                    </div>
+
+                    <!-- Navigation Section -->
+                    <div class="nav-section">
+                        <h1 class="welcome-text">
+                            <span class="letter" style="animation-delay: 0s;">W</span><span class="letter" style="animation-delay: 0.1s;">e</span><span class="letter" style="animation-delay: 0.2s;">l</span><span class="letter" style="animation-delay: 0.3s;">c</span><span class="letter" style="animation-delay: 0.4s;">o</span><span class="letter" style="animation-delay: 0.5s;">m</span><span class="letter" style="animation-delay: 0.6s;">e</span><span class="letter" style="animation-delay: 0.7s;">!</span>
+                        </h1>
+
+                        <nav class="button-nav">
+                            <a href="https://legacy.poptropica.club" class="nav-button" id="btn-legacy">
+                                <img src="buttons/legacyButton.png" alt="Download Legacy" class="btn-normal">
+                                <img src="buttons/legacyButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="#" class="nav-button" id="btn-join">
+                                <img src="buttons/joinButton.png" alt="Join the Club" class="btn-normal">
+                                <img src="buttons/joinButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="https://blog.poptropica.club" class="nav-button" id="btn-blog">
+                                <img src="buttons/blogButton.png" alt="Developer's Blog" class="btn-normal">
+                                <img src="buttons/blogButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="#" class="nav-button" id="btn-island">
+                                <img src="buttons/islandButton.png" alt="Island Help" class="btn-normal">
+                                <img src="buttons/islandButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="https://poptropica.wiki" class="nav-button" id="btn-wiki">
+                                <img src="buttons/wikiButton.png" alt="Poptropica Wiki" class="btn-normal">
+                                <img src="buttons/wikiButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="https://discord.gg/XkQ5ww8BhE" class="nav-button" id="btn-discord">
+                                <img src="buttons/discordButton.png" alt="Discord" class="btn-normal">
+                                <img src="buttons/discordButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="https://www.reddit.com/r/poptropicahelp" class="nav-button" id="btn-reddit">
+                                <img src="buttons/redditButton.png" alt="Subreddit" class="btn-normal">
+                                <img src="buttons/redditButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+
+                            <a href="https://ko-fi.com/wilescreative" class="nav-button" id="btn-support">
+                                <img src="buttons/supportButton.png" alt="Support Us" class="btn-normal">
+                                <img src="buttons/supportButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <img src="../shared/wilesCreative.png" alt="Wiles Creative Studio" class="footer-logo">
+            <p class="footer-disclaimer">Messy Sinker's Poptropica Club is unaffiliated with © Sandbox Networks, Inc. / Sandbox International Holdings Ltd. Wiles Creative Studios claims no ownership of Poptropica intellectual-property. All original art and code © 2026 Wiles Creative Studios.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Load SVG and set up mouse avoidance
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../shared/pcLogo2.svg', true);
+        xhr.onload = function() {
+            if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
+                const logoContainer = document.getElementById('logo-container');
+                logoContainer.innerHTML = xhr.responseText;
+
+                const logoParts = logoContainer.querySelectorAll('[data-animate="logo-part"]');
+                const logoAvoidRadius = 300;
+                const logoMaxPush = 120;
+
+                const logoStates = Array.from(logoParts).map(() => ({ x: 0, y: 0, rotate: 0 }));
+
+                // Assign random float animations to each part
+                logoParts.forEach((part, i) => {
+                    const animIndex = (i % 8) + 1;
+                    const delay = (i * 0.15) % 2;
+                    part.style.animation = `logoFloat${animIndex} ${1.7 + (i % 8) * 0.1}s ease-in-out infinite`;
+                    part.style.animationDelay = `${delay}s`;
+                });
+
+                function updateLogoParts() {
+                    logoParts.forEach((part, i) => {
+                        const state = logoStates[i];
+                        part.style.setProperty('--logo-push-x', state.x + 'px');
+                        part.style.setProperty('--logo-push-y', state.y + 'px');
+                        part.style.setProperty('--logo-push-rotate', state.rotate + 'deg');
+                    });
+                    requestAnimationFrame(updateLogoParts);
+                }
+                updateLogoParts();
+
+                // Messy Sinker's letters - animate each letter with all 3 stroke layers together
+                const messyGroup = logoContainer.querySelector('#messySinkers');
+                const messyLayers = messyGroup ? messyGroup.querySelectorAll(':scope > g') : [];
+                const messyLetters = []; // Array of {paths: [path1, path2, path3], state: {x, y, rotate}}
+
+                if (messyLayers.length === 3) {
+                    const numLetters = messyLayers[0].querySelectorAll('path').length;
+                    for (let i = 0; i < numLetters; i++) {
+                        const paths = Array.from(messyLayers).map(layer =>
+                            layer.querySelectorAll('path')[i]
+                        );
+                        messyLetters.push({
+                            paths: paths,
+                            state: { x: 0, y: 0, rotate: 0 }
+                        });
+                        // Assign subtle float animation to each letter
+                        const animIndex = (i % 8) + 1;
+                        const delay = (i * 0.2) % 2;
+                        paths.forEach(path => {
+                            path.style.transformOrigin = 'center center';
+                            path.style.animation = `messyFloat${animIndex} ${2.5 + (i % 8) * 0.15}s ease-in-out infinite`;
+                            path.style.animationDelay = `${delay}s`;
+                        });
+                    }
+                }
+
+                function updateMessyLetters() {
+                    messyLetters.forEach(letter => {
+                        const { paths, state } = letter;
+                        paths.forEach(path => {
+                            path.style.setProperty('--logo-push-x', state.x + 'px');
+                            path.style.setProperty('--logo-push-y', state.y + 'px');
+                            path.style.setProperty('--logo-push-rotate', state.rotate + 'deg');
+                        });
+                    });
+                    requestAnimationFrame(updateMessyLetters);
+                }
+                updateMessyLetters();
+
+                document.addEventListener('mousemove', (e) => {
+                    // Logo parts (Poptropica Club letters)
+                    logoParts.forEach((part, i) => {
+                        const rect = part.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+
+                        const dx = centerX - e.clientX;
+                        const dy = centerY - e.clientY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        let targetX = 0, targetY = 0, targetRotate = 0;
+                        if (distance < logoAvoidRadius) {
+                            const force = Math.pow((logoAvoidRadius - distance) / logoAvoidRadius, 0.7);
+                            const angle = Math.atan2(dy, dx);
+                            targetX = Math.cos(angle) * logoMaxPush * force;
+                            targetY = Math.sin(angle) * logoMaxPush * force;
+                            targetRotate = targetX * 0.3;
+                        }
+
+                        const ease = 0.15;
+                        logoStates[i].x += (targetX - logoStates[i].x) * ease;
+                        logoStates[i].y += (targetY - logoStates[i].y) * ease;
+                        logoStates[i].rotate += (targetRotate - logoStates[i].rotate) * ease;
+                    });
+
+                    // Messy Sinker's letters (same mouse response as main logo)
+                    messyLetters.forEach(letter => {
+                        // Use first path for position calculation (all 3 are in same position)
+                        const rect = letter.paths[0].getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+
+                        const dx = centerX - e.clientX;
+                        const dy = centerY - e.clientY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        let targetX = 0, targetY = 0, targetRotate = 0;
+                        if (distance < logoAvoidRadius) {
+                            const force = Math.pow((logoAvoidRadius - distance) / logoAvoidRadius, 0.7);
+                            const angle = Math.atan2(dy, dx);
+                            targetX = Math.cos(angle) * logoMaxPush * force;
+                            targetY = Math.sin(angle) * logoMaxPush * force;
+                            targetRotate = targetX * 0.3;
+                        }
+
+                        const ease = 0.15;
+                        letter.state.x += (targetX - letter.state.x) * ease;
+                        letter.state.y += (targetY - letter.state.y) * ease;
+                        letter.state.rotate += (targetRotate - letter.state.rotate) * ease;
+                    });
+                });
+            }
+        };
+        xhr.send();
+
+        // Random island icons
+        const mapIcons = [
+            'mapIconArab1.png', 'mapIconArab2.png', 'mapIconArab3.png', 'mapIconAstro.png',
+            'mapIconBacklot.png', 'mapIconBigNate.png', 'mapIconBoardwalk.png', 'mapIconCarnival.png',
+            'mapIconCarrot.png', 'mapIconCharlie.png', 'mapIconCon1.png', 'mapIconCon2.png',
+            'mapIconCon3.png', 'mapIconCounter.png', 'mapIconCryptid.png', 'mapIconDeepDive1.png',
+            'mapIconDeepDive2.png', 'mapIconDeepDive3.png', 'mapIconEarly.png', 'mapIconGameShow.png',
+            'mapIconGHD.png', 'mapIconGhost.png', 'mapIconJapan.png', 'mapIconLegendary.png',
+            'mapIconMock.png', 'mapIconMoon.png', 'mapIconMyth.png', 'mapIconNabooti.png',
+            'mapIconNightWatch.png', 'mapIconPeanuts.png', 'mapIconPoptropolis.png', 'mapIconPrison.png',
+            'mapIconReality.png', 'mapIconReality2.png', 'mapIconShark.png', 'mapIconShrink.png',
+            'mapIconSkull.png', 'mapIconSOS.png', 'mapIconSpy.png', 'mapIconSteam.png',
+            'mapIconSuper.png', 'mapIconSurvival1.png', 'mapIconSurvival2.png', 'mapIconSurvival3.png',
+            'mapIconSurvival4.png', 'mapIconSurvival5.png', 'mapIconTime.png', 'mapIconTimmy.png',
+            'mapIconTrain.png', 'mapIconTwisted.png', 'mapIconVampire.png', 'mapIconViking.png',
+            'mapIconVillain.png', 'mapIconVirus.png', 'mapIconWest.png', 'mapIconWimpy.png',
+            'mapIconZomberry.png'
+        ];
+
+        // Shuffle and pick 3 unique icons
+        const shuffled = mapIcons.sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, 3);
+
+        // Assign to island elements
+        document.querySelector('.island-1').src = '../mapIcons/' + selected[0];
+        document.querySelector('.island-2').src = '../mapIcons/' + selected[1];
+        document.querySelector('.island-3').src = '../mapIcons/' + selected[2];
+
+        // Letter mouse avoidance
+        const letters = document.querySelectorAll('.welcome-text .letter');
+        const avoidRadius = 150;
+        const maxPush = 35;
+
+        // Track current positions for smooth interpolation
+        const letterStates = Array.from(letters).map(() => ({ x: 0, y: 0, rotate: 0 }));
+
+        function updateLetters() {
+            letters.forEach((letter, i) => {
+                const state = letterStates[i];
+                letter.style.setProperty('--push-x', state.x + 'px');
+                letter.style.setProperty('--push-y', state.y + 'px');
+                letter.style.setProperty('--push-rotate', state.rotate + 'deg');
+            });
+            requestAnimationFrame(updateLetters);
+        }
+        updateLetters();
+
+        document.addEventListener('mousemove', (e) => {
+            letters.forEach((letter, i) => {
+                const rect = letter.getBoundingClientRect();
+                const letterX = rect.left + rect.width / 2;
+                const letterY = rect.top + rect.height / 2;
+
+                const dx = letterX - e.clientX;
+                const dy = letterY - e.clientY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                let targetX = 0, targetY = 0, targetRotate = 0;
+
+                if (distance < avoidRadius) {
+                    const force = Math.pow((avoidRadius - distance) / avoidRadius, 0.7);
+                    const angle = Math.atan2(dy, dx);
+                    targetX = Math.cos(angle) * maxPush * force;
+                    targetY = Math.sin(angle) * maxPush * force;
+                    targetRotate = targetX * 0.3;
+                }
+
+                // Smooth interpolation (ease toward target)
+                const ease = 0.15;
+                letterStates[i].x += (targetX - letterStates[i].x) * ease;
+                letterStates[i].y += (targetY - letterStates[i].y) * ease;
+                letterStates[i].rotate += (targetRotate - letterStates[i].rotate) * ease;
+            });
+        });
+    </script>
+</body>
+</html>

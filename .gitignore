@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Thumbnails
+Thumbs.db
+
+# Design source files (large)
+*.psd
+*.ai
+*.sketch
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (if added later)
+node_modules/
+npm-debug.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build output (if added later)
+dist/
+build/
+
+# Logs
+*.log
+
+# Legacy site (separate repo)
+website/legacy/
