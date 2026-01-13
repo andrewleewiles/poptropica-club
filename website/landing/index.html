@@ -6,7 +6,7 @@
     <title>Messy Sinker's Poptropica Club</title>
     <meta name="description" content="Welcome to Poptropica Club! Download Poptropica Legacy, join our community, and explore the islands.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="../shared/logo.png">
+    <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
     <div class="page-wrapper">
@@ -20,19 +20,16 @@
             <!-- Cloud Container -->
             <div class="cloud-container">
                 <!-- Background layers behind clouds -->
-                <img src="../shared/ocean.png" alt="" class="bg-layer bg-ocean" aria-hidden="true">
+                <img src="shared/ocean.png" alt="" class="bg-layer bg-ocean" aria-hidden="true">
                 <div class="islands-container">
                     <img src="" alt="" class="island island-1" aria-hidden="true">
                     <img src="" alt="" class="island island-2" aria-hidden="true">
                     <img src="" alt="" class="island island-3" aria-hidden="true">
                 </div>
-                <img src="../shared/trees.png" alt="" class="bg-layer bg-trees" aria-hidden="true">
+                <img src="shared/trees.png" alt="" class="bg-layer bg-trees" aria-hidden="true">
 
-                <!-- Cloud borders -->
-                <img src="../shared/cloudTop.png" alt="" class="cloud-border cloud-top" aria-hidden="true">
-                <img src="../shared/cloudBottom.png" alt="" class="cloud-border cloud-bottom" aria-hidden="true">
-                <img src="../shared/cloudLeft.png" alt="" class="cloud-border cloud-left" aria-hidden="true">
-                <img src="../shared/cloudRight.png" alt="" class="cloud-border cloud-right" aria-hidden="true">
+                <!-- Dynamic Cloud Border -->
+                <svg class="cloud-border-svg" aria-hidden="true"></svg>
 
                 <!-- Content inside cloud -->
                 <div class="cloud-content">
@@ -48,7 +45,7 @@
                         </h1>
 
                         <nav class="button-nav">
-                            <a href="https://legacy.poptropica.club" class="nav-button" id="btn-legacy">
+                            <a href="https://legacy.poptropica.club" class="nav-button" id="btn-legacy" target="_blank">
                                 <img src="buttons/legacyButton.png" alt="Download Legacy" class="btn-normal">
                                 <img src="buttons/legacyButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
@@ -63,27 +60,27 @@
                                 <img src="buttons/blogButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="#" class="nav-button" id="btn-island">
+                            <a href="#" class="nav-button" id="btn-island" target="_blank">
                                 <img src="buttons/islandButton.png" alt="Island Help" class="btn-normal">
                                 <img src="buttons/islandButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="https://poptropica.wiki" class="nav-button" id="btn-wiki">
+                            <a href="https://poptropica.wiki" class="nav-button" id="btn-wiki" target="_blank">
                                 <img src="buttons/wikiButton.png" alt="Poptropica Wiki" class="btn-normal">
                                 <img src="buttons/wikiButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="https://discord.gg/XkQ5ww8BhE" class="nav-button" id="btn-discord">
+                            <a href="https://discord.gg/XkQ5ww8BhE" class="nav-button" id="btn-discord" target="_blank">
                                 <img src="buttons/discordButton.png" alt="Discord" class="btn-normal">
                                 <img src="buttons/discordButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="https://www.reddit.com/r/poptropicahelp" class="nav-button" id="btn-reddit">
+                            <a href="https://www.reddit.com/r/poptropicahelp" class="nav-button" id="btn-reddit" target="_blank">
                                 <img src="buttons/redditButton.png" alt="Subreddit" class="btn-normal">
                                 <img src="buttons/redditButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="https://ko-fi.com/wilescreative" class="nav-button" id="btn-support">
+                            <a href="https://ko-fi.com/wilescreative" class="nav-button" id="btn-support" target="_blank">
                                 <img src="buttons/supportButton.png" alt="Support Us" class="btn-normal">
                                 <img src="buttons/supportButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
@@ -95,16 +92,295 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <img src="../shared/wilesCreative.png" alt="Wiles Creative Studio" class="footer-logo">
+            <img src="shared/wilesCreative.png" alt="Wiles Creative Studio" class="footer-logo">
             <p class="footer-disclaimer">Messy Sinker's Poptropica Club is unaffiliated with © Sandbox Networks, Inc. / Sandbox International Holdings Ltd. Wiles Creative Studios claims no ownership of Poptropica intellectual-property. All original art and code © 2026 Wiles Creative Studios.</p>
         </footer>
 
     </div>
 
+    <!-- Join the Club Registration Modal (outside page-wrapper for proper fixed positioning) -->
+    <div id="joinModal" class="join-modal">
+        <div class="join-popup">
+            <button class="join-close-btn" id="closeJoin" type="button">
+                <img src="shared/close.svg" alt="Close" class="close-normal">
+                <img src="shared/closeHover.svg" alt="" class="close-hover" aria-hidden="true">
+            </button>
+            <h2 class="join-title">Join the Club!</h2>
+            <form id="joinForm" class="join-form" novalidate>
+                <div class="form-group">
+                    <label for="join-email">Email</label>
+                    <input type="email" id="join-email" name="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="join-username">Username</label>
+                    <input type="text" id="join-username" name="username" required
+                           pattern="[A-Za-z0-9_]{3,20}"
+                           title="3-20 characters, letters, numbers, underscore only"
+                           autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="join-password">Password</label>
+                    <input type="password" id="join-password" name="password" required minlength="8" autocomplete="new-password">
+                    <span class="form-hint">At least 8 characters</span>
+                </div>
+                <div class="form-group">
+                    <label for="join-confirm">Confirm Password</label>
+                    <input type="password" id="join-confirm" name="confirm" required minlength="8" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="join-birthdate">Date of Birth</label>
+                    <input type="date" id="join-birthdate" name="birthdate" required>
+                    <span class="form-hint">You must be 13 or older to join</span>
+                </div>
+                <div class="form-group form-checkbox">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="join-newsletter" name="newsletter" checked>
+                        <span class="checkbox-text">Send me Poptropica Club newsletters and updates</span>
+                    </label>
+                </div>
+                <div class="form-error" id="joinError"></div>
+                <button type="submit" class="join-submit-btn">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loading">Creating...</span>
+                </button>
+            </form>
+            <p class="join-login-link">Already a member? <a href="#" id="switchToLogin">Log in</a></p>
+
+            <!-- Success message (hidden by default) -->
+            <div id="joinSuccess" class="join-success">
+                <h3>Check Your Email!</h3>
+                <p>We've sent a verification link to <span id="successEmail"></span>.</p>
+                <p>Click the link in the email to activate your account.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="join-modal">
+        <div class="join-popup">
+            <button class="join-close-btn" id="closeLogin" type="button">
+                <img src="shared/close.svg" alt="Close" class="close-normal">
+                <img src="shared/closeHover.svg" alt="" class="close-hover" aria-hidden="true">
+            </button>
+            <h2 class="join-title">Welcome Back!</h2>
+            <form id="loginForm" class="join-form" novalidate>
+                <div class="form-group">
+                    <label for="login-username">Username or Email</label>
+                    <input type="text" id="login-username" name="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                </div>
+                <div class="form-error" id="loginError"></div>
+                <button type="submit" class="join-submit-btn">
+                    <span class="btn-text">Log In</span>
+                    <span class="btn-loading">Logging in...</span>
+                </button>
+            </form>
+            <p class="join-login-link">Not a member? <a href="#" id="switchToJoin">Join the Club</a></p>
+            <p class="join-login-link forgot-link"><a href="#" id="forgotPasswordLink">Forgot password?</a></p>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal" class="join-modal">
+        <div class="join-popup">
+            <button class="join-close-btn" id="closeForgot" type="button">
+                <img src="shared/close.svg" alt="Close" class="close-normal">
+                <img src="shared/closeHover.svg" alt="" class="close-hover" aria-hidden="true">
+            </button>
+            <h2 class="join-title">Reset Password</h2>
+            <form id="forgotForm" class="join-form" novalidate>
+                <p style="margin-bottom: 15px; font-size: 14px; opacity: 0.9;">Enter your email address and we'll send you a link to reset your password.</p>
+                <div class="form-group">
+                    <label for="forgot-email">Email</label>
+                    <input type="email" id="forgot-email" name="email" required autocomplete="email">
+                </div>
+                <div class="form-error" id="forgotError"></div>
+                <button type="submit" class="join-submit-btn">
+                    <span class="btn-text">Send Reset Link</span>
+                    <span class="btn-loading">Sending...</span>
+                </button>
+            </form>
+            <p class="join-login-link"><a href="#" id="backToLogin">Back to login</a></p>
+
+            <!-- Success message (hidden by default) -->
+            <div id="forgotSuccess" class="join-success">
+                <h3>Check Your Email!</h3>
+                <p>If an account exists with that email, we've sent a password reset link.</p>
+                <p>The link will expire in 1 hour.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Dynamic Cloud Border - loads path from cloudPath.svg
+        (async function() {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.querySelector('.cloud-border-svg');
+
+            // Fetch the cloudPath.svg and extract the path data
+            const response = await fetch('shared/cloudPath.svg');
+            const svgText = await response.text();
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+            const cloudPath = svgDoc.querySelector('path').getAttribute('d');
+
+            // Get container dimensions
+            const container = document.querySelector('.cloud-container');
+            const rect = container.getBoundingClientRect();
+
+            // Set viewBox to focus on the path area (path spans roughly x:1758-3260, y:763-2485)
+            svg.setAttribute('viewBox', '1658 663 1702 1922');
+            svg.setAttribute('preserveAspectRatio', 'none');
+
+            // We'll create a sine-wave fill path after calculating all the points
+
+            // Create a path element to sample points from for circles
+            const pathEl = document.createElementNS(svgNS, 'path');
+            pathEl.setAttribute('d', cloudPath);
+            pathEl.setAttribute('fill', 'none');
+            svg.appendChild(pathEl);
+
+            // Get total path length
+            const pathLength = pathEl.getTotalLength();
+
+            // Generate circles along the path - smaller, denser for scalloped cloud look
+            const circles = [];
+            const numCircles = 200;
+            const baseRadius = 28;
+            const radiusVariation = 16;
+
+            // Sine wave parameters for wavy cloud edge
+            const waveFrequency = 12; // Number of waves around the path
+            const waveAmplitude = 20; // How far circles bulge in/out
+
+            // Corner positions (approximate t values)
+            const corners = [0, 0.25, 0.5, 0.75];
+            const cornerRadius = 0.06; // How wide the corner zone is
+            const cornerSizeBoost = 1.4; // How much larger corner circles are
+
+            // Function to get corner proximity factor (0 = not near corner, 1 = at corner)
+            function getCornerFactor(t) {
+                let maxFactor = 0;
+                for (const corner of corners) {
+                    const dist = Math.min(Math.abs(t - corner), Math.abs(t - corner + 1), Math.abs(t - corner - 1));
+                    if (dist < cornerRadius) {
+                        const factor = 1 - (dist / cornerRadius);
+                        maxFactor = Math.max(maxFactor, factor);
+                    }
+                }
+                return maxFactor;
+            }
+
+            // First pass: calculate all wave points for the fill path
+            const wavePoints = [];
+            const fillResolution = 200; // More points for smooth fill path
+            for (let i = 0; i < fillResolution; i++) {
+                const t = i / fillResolution;
+                const point = pathEl.getPointAtLength(t * pathLength);
+
+                const nextT = Math.min(t + 0.001, 1);
+                const nextPoint = pathEl.getPointAtLength(nextT * pathLength);
+
+                const dx = nextPoint.x - point.x;
+                const dy = nextPoint.y - point.y;
+                const len = Math.sqrt(dx * dx + dy * dy) || 1;
+
+                const normalX = dy / len;
+                const normalY = -dx / len;
+
+                const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
+                wavePoints.push({
+                    x: point.x + normalX * waveOffset,
+                    y: point.y + normalY * waveOffset
+                });
+            }
+
+            // Create smooth curved fill path using quadratic bezier curves
+            let waveFillD = `M${wavePoints[0].x},${wavePoints[0].y}`;
+            for (let i = 1; i < wavePoints.length; i++) {
+                const prev = wavePoints[i - 1];
+                const curr = wavePoints[i];
+                const midX = (prev.x + curr.x) / 2;
+                const midY = (prev.y + curr.y) / 2;
+                waveFillD += ` Q${prev.x},${prev.y} ${midX},${midY}`;
+            }
+            // Close with final curve
+            const last = wavePoints[wavePoints.length - 1];
+            const first = wavePoints[0];
+            waveFillD += ` Q${last.x},${last.y} ${first.x},${first.y} Z`;
+
+            const waveFillPath = document.createElementNS(svgNS, 'path');
+            waveFillPath.setAttribute('d', waveFillD);
+            waveFillPath.setAttribute('fill', 'white');
+            svg.appendChild(waveFillPath);
+
+            // Second pass: create circles along the wave path
+            for (let i = 0; i < numCircles; i++) {
+                const t = i / numCircles;
+                const point = pathEl.getPointAtLength(t * pathLength);
+
+                // Get nearby point to calculate normal direction
+                const nextT = Math.min(t + 0.001, 1);
+                const nextPoint = pathEl.getPointAtLength(nextT * pathLength);
+
+                // Calculate tangent and normal
+                const dx = nextPoint.x - point.x;
+                const dy = nextPoint.y - point.y;
+                const len = Math.sqrt(dx * dx + dy * dy) || 1;
+
+                // Normal is perpendicular to tangent (pointing outward)
+                const normalX = dy / len;
+                const normalY = -dx / len;
+
+                // Apply sine wave offset along normal
+                const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
+                const finalX = point.x + normalX * waveOffset;
+                const finalY = point.y + normalY * waveOffset;
+
+                // Make circles larger near corners
+                const cornerFactor = getCornerFactor(t);
+                const sizeMultiplier = 1 + (cornerSizeBoost - 1) * cornerFactor;
+                const radius = (baseRadius + (Math.random() - 0.5) * radiusVariation * 2) * sizeMultiplier;
+
+                // Create circle element at wave-offset position
+                const circle = document.createElementNS(svgNS, 'circle');
+                circle.setAttribute('cx', finalX);
+                circle.setAttribute('cy', finalY);
+                circle.setAttribute('r', radius);
+                circle.setAttribute('fill', 'white');
+
+                // Store animation data
+                circles.push({
+                    el: circle,
+                    baseRadius: radius,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.5 + Math.random() * 1.5,
+                    jitterAmount: 0.08 + Math.random() * 0.12
+                });
+
+                svg.appendChild(circle);
+            }
+
+            // Remove the path (keep circles)
+            svg.removeChild(pathEl);
+
+            // Animate circles with persistent scale jitter
+            function animateCircles(time) {
+                circles.forEach(c => {
+                    const jitter = 1 + Math.sin(time * 0.001 * c.speed + c.phase) * c.jitterAmount;
+                    c.el.setAttribute('r', c.baseRadius * jitter);
+                });
+                requestAnimationFrame(animateCircles);
+            }
+            requestAnimationFrame(animateCircles);
+        })();
+
         // Load SVG and set up mouse avoidance
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', '../shared/pcLogo2.svg', true);
+        xhr.open('GET', 'shared/pcLogo2.svg', true);
         xhr.onload = function() {
             if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
                 const logoContainer = document.getElementById('logo-container');
@@ -254,9 +530,9 @@
         const selected = shuffled.slice(0, 3);
 
         // Assign to island elements
-        document.querySelector('.island-1').src = '../mapIcons/' + selected[0];
-        document.querySelector('.island-2').src = '../mapIcons/' + selected[1];
-        document.querySelector('.island-3').src = '../mapIcons/' + selected[2];
+        document.querySelector('.island-1').src = 'mapIcons/' + selected[0];
+        document.querySelector('.island-2').src = 'mapIcons/' + selected[1];
+        document.querySelector('.island-3').src = 'mapIcons/' + selected[2];
 
         // Letter mouse avoidance
         const letters = document.querySelectorAll('.welcome-text .letter');
@@ -304,6 +580,565 @@
                 letterStates[i].rotate += (targetRotate - letterStates[i].rotate) * ease;
             });
         });
+
+        // ========================================
+        // Join the Club Registration Modal
+        // ========================================
+        (function() {
+            const modal = document.getElementById('joinModal');
+            const popup = modal.querySelector('.join-popup');
+            const closeBtn = document.getElementById('closeJoin');
+            const joinBtn = document.getElementById('btn-join');
+            const form = document.getElementById('joinForm');
+            const errorDiv = document.getElementById('joinError');
+            const submitBtn = form.querySelector('.join-submit-btn');
+
+            const emailInput = document.getElementById('join-email');
+            const usernameInput = document.getElementById('join-username');
+            const passwordInput = document.getElementById('join-password');
+            const confirmInput = document.getElementById('join-confirm');
+            const birthdateInput = document.getElementById('join-birthdate');
+            const newsletterInput = document.getElementById('join-newsletter');
+
+            // API endpoint - Central Auth Service
+            const API_URL = 'https://auth.poptropica.club/api/auth/register';
+
+            // Open modal
+            joinBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+
+            // Close modal - X button
+            closeBtn.addEventListener('click', closeModal);
+
+            // Close modal - click outside popup
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal - Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            function openModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                // Focus first input
+                setTimeout(() => emailInput.focus(), 100);
+            }
+
+            function closeModal() {
+                modal.classList.add('closing');
+                setTimeout(() => {
+                    modal.classList.remove('active', 'closing');
+                    document.body.style.overflow = '';
+                    // Reset form state
+                    form.reset();
+                    popup.classList.remove('success');
+                    hideError();
+                    clearValidation();
+                }, 300);
+            }
+
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('visible');
+            }
+
+            function hideError() {
+                errorDiv.classList.remove('visible');
+            }
+
+            function clearValidation() {
+                [emailInput, usernameInput, passwordInput, confirmInput, birthdateInput].forEach(input => {
+                    input.classList.remove('invalid');
+                });
+            }
+
+            function validateForm() {
+                clearValidation();
+                hideError();
+
+                const email = emailInput.value.trim();
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+                const confirm = confirmInput.value;
+
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    emailInput.classList.add('invalid');
+                    showError('Please enter a valid email address.');
+                    emailInput.focus();
+                    return false;
+                }
+
+                // Username validation (3-20 chars, alphanumeric + underscore)
+                const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
+                if (!usernameRegex.test(username)) {
+                    usernameInput.classList.add('invalid');
+                    showError('Username must be 3-20 characters (letters, numbers, underscore only).');
+                    usernameInput.focus();
+                    return false;
+                }
+
+                // Password length
+                if (password.length < 8) {
+                    passwordInput.classList.add('invalid');
+                    showError('Password must be at least 8 characters.');
+                    passwordInput.focus();
+                    return false;
+                }
+
+                // Password match
+                if (password !== confirm) {
+                    confirmInput.classList.add('invalid');
+                    showError('Passwords do not match.');
+                    confirmInput.focus();
+                    return false;
+                }
+
+                // Age validation (must be 13+)
+                const birthdate = birthdateInput.value;
+                if (!birthdate) {
+                    birthdateInput.classList.add('invalid');
+                    showError('Please enter your date of birth.');
+                    birthdateInput.focus();
+                    return false;
+                }
+
+                const today = new Date();
+                const birth = new Date(birthdate);
+                let age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                    age--;
+                }
+
+                if (age < 13) {
+                    birthdateInput.classList.add('invalid');
+                    showError('You must be 13 or older to join Poptropica Club.');
+                    birthdateInput.focus();
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (!validateForm()) {
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                hideError();
+
+                const data = {
+                    email: emailInput.value.trim(),
+                    username: usernameInput.value.trim(),
+                    password: passwordInput.value,
+                    birthdate: birthdateInput.value,
+                    newsletter: newsletterInput.checked
+                };
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        // Show success message
+                        document.getElementById('successEmail').textContent = data.email;
+                        popup.classList.add('success');
+                    } else {
+                        // Show error from server
+                        showError(result.message || 'Registration failed. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showError('Connection error. Please check your internet and try again.');
+                } finally {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Clear validation on input
+            [emailInput, usernameInput, passwordInput, confirmInput, birthdateInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    input.classList.remove('invalid');
+                    hideError();
+                });
+            });
+
+            // Switch to login modal
+            document.getElementById('switchToLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal();
+                setTimeout(() => {
+                    document.getElementById('loginModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    document.getElementById('login-username').focus();
+                }, 350);
+            });
+        })();
+
+        // ========================================
+        // Login Modal
+        // ========================================
+        (function() {
+            const modal = document.getElementById('loginModal');
+            const popup = modal.querySelector('.join-popup');
+            const closeBtn = document.getElementById('closeLogin');
+            const form = document.getElementById('loginForm');
+            const errorDiv = document.getElementById('loginError');
+            const submitBtn = form.querySelector('.join-submit-btn');
+
+            const usernameInput = document.getElementById('login-username');
+            const passwordInput = document.getElementById('login-password');
+
+            // API endpoint - Central Auth Service
+            const API_URL = 'https://auth.poptropica.club/api/auth/login';
+
+            // Close modal - X button
+            closeBtn.addEventListener('click', closeModal);
+
+            // Close modal - click outside popup
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal - Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            function closeModal() {
+                modal.classList.add('closing');
+                setTimeout(() => {
+                    modal.classList.remove('active', 'closing');
+                    document.body.style.overflow = '';
+                    form.reset();
+                    hideError();
+                    clearValidation();
+                }, 300);
+            }
+
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('visible');
+            }
+
+            function hideError() {
+                errorDiv.classList.remove('visible');
+            }
+
+            function clearValidation() {
+                [usernameInput, passwordInput].forEach(input => {
+                    input.classList.remove('invalid');
+                });
+            }
+
+            // Switch to join modal
+            document.getElementById('switchToJoin').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal();
+                setTimeout(() => {
+                    document.getElementById('joinModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    document.getElementById('join-email').focus();
+                }, 350);
+            });
+
+            // Hidden iframe auth handler
+            function performIframeAuth(wpUrl, mwUrl) {
+                return new Promise((resolve) => {
+                    const results = { wordpress: null, mediawiki: null };
+                    let completed = 0;
+                    const expected = mwUrl ? 2 : 1;
+
+                    // Create container for hidden iframes
+                    const container = document.createElement('div');
+                    container.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;';
+                    document.body.appendChild(container);
+
+                    // Listen for postMessage from iframes
+                    function handleMessage(event) {
+                        // Only accept messages from our domains
+                        if (!['https://blog.poptropica.club', 'https://poptropica.wiki'].includes(event.origin)) {
+                            return;
+                        }
+
+                        const data = event.data;
+                        if (data && data.type === 'poptropica_auth') {
+                            results[data.platform] = data.success;
+                            completed++;
+
+                            if (completed >= expected) {
+                                cleanup();
+                                resolve(results);
+                            }
+                        }
+                    }
+
+                    window.addEventListener('message', handleMessage);
+
+                    // Cleanup function
+                    function cleanup() {
+                        window.removeEventListener('message', handleMessage);
+                        container.remove();
+                    }
+
+                    // Create WordPress iframe
+                    const wpIframe = document.createElement('iframe');
+                    wpIframe.src = wpUrl;
+                    wpIframe.style.cssText = 'width:1px;height:1px;border:none;';
+                    container.appendChild(wpIframe);
+
+                    // Create MediaWiki iframe if URL provided
+                    if (mwUrl) {
+                        const mwIframe = document.createElement('iframe');
+                        mwIframe.src = mwUrl;
+                        mwIframe.style.cssText = 'width:1px;height:1px;border:none;';
+                        container.appendChild(mwIframe);
+                    }
+
+                    // Timeout after 10 seconds
+                    setTimeout(() => {
+                        cleanup();
+                        resolve(results);
+                    }, 10000);
+                });
+            }
+
+            // Form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                clearValidation();
+                hideError();
+
+                const identifier = usernameInput.value.trim();
+                const password = passwordInput.value;
+
+                if (!identifier) {
+                    usernameInput.classList.add('invalid');
+                    showError('Please enter your username or email.');
+                    usernameInput.focus();
+                    return;
+                }
+
+                if (!password) {
+                    passwordInput.classList.add('invalid');
+                    showError('Please enter your password.');
+                    passwordInput.focus();
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ identifier, password, platform: 'landing' })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        // Store auth token
+                        localStorage.setItem('pc_auth_token', result.token);
+                        localStorage.setItem('pc_auth_expires', result.expires_at);
+
+                        // Show success state
+                        popup.classList.add('login-success');
+                        popup.innerHTML = `
+                            <div class="login-success-content">
+                                <h2 class="join-title">Welcome back, ${result.user.username}!</h2>
+                                <p>Your credentials are verified. Visit the blog or wiki to log in.</p>
+                                <div class="welcome-actions" style="margin-top: 20px;">
+                                    <a href="https://blog.poptropica.club/wp-login.php" class="join-submit-btn" style="display:inline-block;text-decoration:none;text-align:center;">
+                                        Log in to Blog
+                                    </a>
+                                    <a href="https://poptropica.wiki/index.php?title=Special:UserLogin" class="join-submit-btn" style="display:inline-block;text-decoration:none;text-align:center;margin-left:10px;background:#4a9eff;">
+                                        Log in to Wiki
+                                    </a>
+                                </div>
+                                <p style="margin-top: 15px; font-size: 14px; opacity: 0.8;">
+                                    <a href="#" onclick="document.getElementById('loginModal').classList.remove('active');document.body.style.overflow='';return false;" style="color: inherit;">Close</a>
+                                </p>
+                            </div>
+                        `;
+                    } else {
+                        showError(result.message || 'Login failed. Please check your credentials.');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    showError('Connection error. Please try again.');
+                } finally {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Clear validation on input
+            [usernameInput, passwordInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    input.classList.remove('invalid');
+                    hideError();
+                });
+            });
+
+            // Forgot password link
+            document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal();
+                setTimeout(() => {
+                    document.getElementById('forgotModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    document.getElementById('forgot-email').focus();
+                }, 350);
+            });
+        })();
+
+        // ========================================
+        // Forgot Password Modal
+        // ========================================
+        (function() {
+            const modal = document.getElementById('forgotModal');
+            const popup = modal.querySelector('.join-popup');
+            const closeBtn = document.getElementById('closeForgot');
+            const form = document.getElementById('forgotForm');
+            const errorDiv = document.getElementById('forgotError');
+            const submitBtn = form.querySelector('.join-submit-btn');
+            const emailInput = document.getElementById('forgot-email');
+
+            // API endpoint - Central Auth Service
+            const API_URL = 'https://auth.poptropica.club/api/auth/forgot-password';
+
+            // Close modal - X button
+            closeBtn.addEventListener('click', closeModal);
+
+            // Close modal - click outside popup
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal - Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            function closeModal() {
+                modal.classList.add('closing');
+                setTimeout(() => {
+                    modal.classList.remove('active', 'closing');
+                    document.body.style.overflow = '';
+                    form.reset();
+                    popup.classList.remove('success');
+                    hideError();
+                    emailInput.classList.remove('invalid');
+                }, 300);
+            }
+
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('visible');
+            }
+
+            function hideError() {
+                errorDiv.classList.remove('visible');
+            }
+
+            // Back to login link
+            document.getElementById('backToLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal();
+                setTimeout(() => {
+                    document.getElementById('loginModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    document.getElementById('login-username').focus();
+                }, 350);
+            });
+
+            // Form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                hideError();
+                emailInput.classList.remove('invalid');
+
+                const email = emailInput.value.trim();
+
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    emailInput.classList.add('invalid');
+                    showError('Please enter a valid email address.');
+                    emailInput.focus();
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email })
+                    });
+
+                    const result = await response.json();
+
+                    // Always show success (don't reveal if email exists)
+                    popup.classList.add('success');
+                } catch (error) {
+                    console.error('Forgot password error:', error);
+                    showError('Connection error. Please try again.');
+                } finally {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Clear validation on input
+            emailInput.addEventListener('input', () => {
+                emailInput.classList.remove('invalid');
+                hideError();
+            });
+        })();
     </script>
 </body>
 </html>
