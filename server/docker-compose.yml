@@ -18,7 +18,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - wordpress_html:/var/www/wordpress:ro
+      - wordpress_html:/var/www/html:ro
     networks:
       - internal
     depends_on:
