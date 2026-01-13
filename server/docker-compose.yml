@@ -69,7 +69,11 @@ services:
 
 volumes:
   wordpress_html:
+    external: true
+    name: poptropica_wordpress_html
   mariadb_data:
+    external: true
+    name: poptropica_mariadb_data
   mediawiki_html:
 
 networks:
