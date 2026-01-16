@@ -476,6 +476,7 @@ body {
     height: auto;
     opacity: 0.8;
     transition: opacity 0.2s ease;
+    margin-top: 7px;
 }
 
 .footer-logo:hover {
