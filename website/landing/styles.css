@@ -210,7 +210,7 @@ body {
 .character-section {
     position: absolute;
     left: -100px;
-    top: -320px;
+    top: -305px;
     z-index: 1;
     pointer-events: none;
 }
