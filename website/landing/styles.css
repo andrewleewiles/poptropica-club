@@ -382,7 +382,7 @@ body {
 /* Latest Blog Post */
 .latest-post {
     position: absolute;
-    bottom: 173px;
+    bottom: 193px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -639,7 +639,7 @@ body {
     }
 
     .latest-post {
-        bottom: 153px;
+        bottom: 173px;
         max-width: 320px;
         gap: 10px;
     }
