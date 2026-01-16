@@ -13,6 +13,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Creabbrg';
+    src: url('../shared/fonts/CREABBB_.TTF') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -336,6 +343,7 @@ body {
 /* Tagline */
 .tagline {
     font-family: 'Creabbrg', Arial, sans-serif;
+    font-weight: bold;
     font-size: 1.6rem;
     color: #000;
     text-align: center;
