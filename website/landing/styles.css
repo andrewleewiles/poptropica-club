@@ -344,7 +344,7 @@ body {
 .tagline {
     font-family: 'Creabbrg', Arial, sans-serif;
     font-weight: bold;
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     color: #000;
     text-align: center;
     position: absolute;
@@ -510,7 +510,7 @@ body {
     }
 
     .tagline {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         bottom: 290px;
         padding: 0 15px;
     }
