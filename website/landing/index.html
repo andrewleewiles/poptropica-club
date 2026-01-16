@@ -91,6 +91,17 @@
 
                 <!-- Tagline -->
                 <p class="tagline">The definitive fan community for Poptropica enthusiasts</p>
+
+                <!-- Latest Blog Post -->
+                <div class="latest-post">
+                    <img src="" alt="" class="post-author-avatar" id="postAuthorAvatar">
+                    <div class="speech-bubble">
+                        <a href="" class="post-link" id="postLink">
+                            <span class="post-title" id="postTitle">Loading...</span>
+                        </a>
+                        <p class="post-excerpt" id="postExcerpt"></p>
+                    </div>
+                </div>
             </div>
         </main>
 
@@ -1156,6 +1167,34 @@
                 emailInput.classList.remove('invalid');
                 hideError();
             });
+        })();
+
+        // ========================================
+        // Latest Blog Post
+        // ========================================
+        (async function() {
+            try {
+                const response = await fetch('https://blog.poptropica.club/wp-json/wp/v2/posts?per_page=1&_embed');
+                const posts = await response.json();
+
+                if (posts.length > 0) {
+                    const post = posts[0];
+                    const title = post.title.rendered;
+                    const link = post.link;
+                    const excerpt = post.excerpt.rendered.replace(/<[^>]*>/g, '').trim();
+                    const author = post._embedded?.author?.[0];
+                    const avatarUrl = author?.avatar_urls?.['96'] || '';
+
+                    document.getElementById('postTitle').textContent = title;
+                    document.getElementById('postLink').href = link;
+                    document.getElementById('postExcerpt').textContent = excerpt.substring(0, 120) + (excerpt.length > 120 ? '...' : '');
+                    document.getElementById('postAuthorAvatar').src = avatarUrl;
+                    document.getElementById('postAuthorAvatar').alt = author?.name || 'Author';
+                }
+            } catch (error) {
+                console.error('Failed to load latest post:', error);
+                document.querySelector('.latest-post').style.display = 'none';
+            }
         })();
     </script>
 </body>
