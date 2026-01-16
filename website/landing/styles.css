@@ -358,7 +358,7 @@ body {
 /* Latest Blog Post */
 .latest-post {
     position: absolute;
-    bottom: 100px;
+    bottom: 180px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -617,7 +617,7 @@ body {
     }
 
     .latest-post {
-        bottom: 80px;
+        bottom: 160px;
         max-width: 320px;
         gap: 10px;
     }
