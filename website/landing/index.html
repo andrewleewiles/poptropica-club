@@ -100,6 +100,7 @@
                             <span class="post-title" id="postTitle">Loading...</span>
                         </a>
                         <p class="post-excerpt" id="postExcerpt"></p>
+                        <a href="" class="read-more-link" id="readMoreLink">READ MORE</a>
                     </div>
                 </div>
             </div>
@@ -1190,6 +1191,7 @@
                     document.getElementById('postExcerpt').textContent = excerpt.substring(0, 120) + (excerpt.length > 120 ? '...' : '');
                     document.getElementById('postAuthorAvatar').src = avatarUrl;
                     document.getElementById('postAuthorAvatar').alt = author?.name || 'Author';
+                    document.getElementById('readMoreLink').href = link;
                 }
             } catch (error) {
                 console.error('Failed to load latest post:', error);

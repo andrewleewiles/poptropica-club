@@ -441,6 +441,21 @@ body {
     overflow: hidden;
 }
 
+.read-more-link {
+    font-family: 'Creabbrg', Arial, sans-serif;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #2589d0;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.read-more-link:hover {
+    color: #1a5a8a;
+    text-decoration: underline;
+}
+
 @keyframes buttonWobble {
     0%, 100% { transform: scale(1) rotate(0deg); }
     25% { transform: scale(1.04) rotate(-1deg); }
