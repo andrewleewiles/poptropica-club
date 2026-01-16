@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Poptropica Passport</title>
+    <meta name="description" content="Sign in with your Poptropica Passport to access the blog, wiki, and more.">
+    <link rel="icon" type="image/png" href="../shared/siteIcon.png">
+    <style>
+        @font-face {
+            font-family: 'GrilledCheese';
+            src: url('../shared/fonts/GrilledCheeseBTNRegular.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'Creabbrg';
+            src: url('../shared/fonts/CREABBRG.TTF') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Creabbrg', Arial, sans-serif;
+            min-height: 100vh;
+            background-image: url('../shared/pageBg.png');
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 30px 20px 20px 20px;
+        }
+
+        /* Logo styles */
+        .logo {
+            max-width: 400px;
+            width: 90%;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            margin-bottom: 20px;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        [data-animate="logo-part"] {
+            transform-origin: center center;
+            --logo-push-x: 0px;
+            --logo-push-y: 0px;
+            --logo-push-rotate: 0deg;
+        }
+
+        /* Logo float animations */
+        @keyframes logoFloat1 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-4px) rotate(2deg); }
+        }
+        @keyframes logoFloat2 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-5px) rotate(-2deg); }
+        }
+        @keyframes logoFloat3 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-3px) rotate(1.5deg); }
+        }
+        @keyframes logoFloat4 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-5px) rotate(-2.5deg); }
+        }
+        @keyframes logoFloat5 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-6px) rotate(2deg); }
+        }
+        @keyframes logoFloat6 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-4px) rotate(-1.5deg); }
+        }
+        @keyframes logoFloat7 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-5px) rotate(3deg); }
+        }
+        @keyframes logoFloat8 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-3px) rotate(-2deg); }
+        }
+
+        .login-container {
+            position: relative;
+            padding: 0 30px 30px 30px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .cloud-border-svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% + 100px);
+            height: calc(100% + 100px);
+            pointer-events: none;
+            z-index: 1;
+            overflow: visible;
+        }
+
+        .login-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-header img {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 10px;
+        }
+
+        .login-header h1 {
+            font-family: 'GrilledCheese', Arial, sans-serif;
+            color: #2d7dd2;
+            font-size: 24px;
+            margin-bottom: 3px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .redirect-info {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #1976d2;
+            font-size: 12px;
+        }
+
+        .redirect-info strong {
+            color: #0d47a1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 12px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2d7dd2;
+            box-shadow: 0 0 0 3px rgba(45, 125, 210, 0.2);
+        }
+
+        .form-group input.invalid {
+            border-color: #ff6b6b;
+            background: #fff0f0;
+        }
+
+        .form-error {
+            background: #ff6b6b;
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .form-error.visible {
+            display: block;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(180deg, #7ed321 0%, #5cb500 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'GrilledCheese', Arial, sans-serif;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #3d8a00;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #3d8a00;
+        }
+
+        .submit-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #3d8a00;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn .btn-text,
+        .submit-btn .btn-loading {
+            display: inline;
+        }
+
+        .submit-btn.loading .btn-text {
+            display: none;
+        }
+
+        .submit-btn:not(.loading) .btn-loading {
+            display: none;
+        }
+
+        .footer-links {
+            margin-top: 18px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .footer-links a {
+            color: #2d7dd2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            margin: 0 8px;
+            opacity: 0.5;
+        }
+
+        /* Success state */
+        .login-success {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .login-success h2 {
+            font-family: 'GrilledCheese', Arial, sans-serif;
+            color: #2d7dd2;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .login-success p {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Logo -->
+    <div id="logo-container" class="logo" role="img" aria-label="Poptropica Club"></div>
+
+    <div class="login-container">
+        <!-- Dynamic Cloud Border -->
+        <svg class="cloud-border-svg" aria-hidden="true"></svg>
+
+        <div class="login-content">
+            <div class="login-header">
+                <img src="../shared/popPassportLogo@3x.png" alt="Poptropica Passport">
+            </div>
+
+            <div class="redirect-info" id="redirectInfo" style="display: none;">
+                Signing in to <strong id="redirectTarget"></strong>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-error" id="loginError"></div>
+
+                <form id="form">
+                    <div class="form-group">
+                        <label for="identifier">Username or Email</label>
+                        <input type="text" id="identifier" name="identifier" required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-loading">Signing in...</span>
+                    </button>
+                </form>
+
+                <div class="footer-links">
+                    <a href="../landing/reset-password.html">Forgot password?</a>
+                    <span class="divider">|</span>
+                    <a href="../join/">Create account</a>
+                </div>
+            </div>
+
+            <div id="loginSuccess" class="login-success hidden">
+                <h2>Welcome back!</h2>
+                <p>Redirecting you now...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load animated logo
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../shared/pcLogo2.svg', true);
+        xhr.onload = function() {
+            if (xhr.status === 200 || xhr.status === 0) {
+                const logoContainer = document.getElementById('logo-container');
+                logoContainer.innerHTML = xhr.responseText;
+
+                const logoParts = logoContainer.querySelectorAll('[data-animate="logo-part"]');
+
+                // Assign float animations to each part
+                logoParts.forEach((part, i) => {
+                    const animIndex = (i % 8) + 1;
+                    const delay = (i * 0.15) % 2;
+                    part.style.animation = `logoFloat${animIndex} ${1.7 + (i % 8) * 0.1}s ease-in-out infinite`;
+                    part.style.animationDelay = `${delay}s`;
+                });
+            }
+        };
+        xhr.send();
+
+        // Dynamic Cloud Border
+        (async function() {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.querySelector('.cloud-border-svg');
+            if (!svg) return;
+
+            const response = await fetch('../shared/cloudPath.svg');
+            const svgText = await response.text();
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+            const cloudPath = svgDoc.querySelector('path').getAttribute('d');
+
+            const svgRect = svg.getBoundingClientRect();
+            const svgWidth = svgRect.width;
+            const svgHeight = svgRect.height;
+
+            const origViewBox = { x: 1658, y: 663, width: 1702, height: 1922 };
+
+            const topSliceRatio = 0.20;
+            const bottomSliceRatio = 0.20;
+            const topSliceHeight = origViewBox.height * topSliceRatio;
+            const bottomSliceHeight = origViewBox.height * bottomSliceRatio;
+            const origMiddleHeight = origViewBox.height * (1 - topSliceRatio - bottomSliceRatio);
+
+            const scaleX = svgWidth / origViewBox.width;
+            const fixedTopHeight = topSliceHeight * scaleX;
+            const fixedBottomHeight = bottomSliceHeight * scaleX;
+            const stretchedMiddleHeight = Math.max(0, svgHeight - fixedTopHeight - fixedBottomHeight);
+
+            const useThreeZone = stretchedMiddleHeight > 0;
+            const scaleY = svgHeight / origViewBox.height;
+
+            svg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+
+            const pathEl = document.createElementNS(svgNS, 'path');
+            pathEl.setAttribute('d', cloudPath);
+            pathEl.setAttribute('fill', 'none');
+            svg.appendChild(pathEl);
+
+            const pathLength = pathEl.getTotalLength();
+
+            function transformPoint(x, y) {
+                const newX = (x - origViewBox.x) * scaleX;
+                if (!useThreeZone) {
+                    return { x: newX, y: (y - origViewBox.y) * scaleY };
+                }
+                const localY = y - origViewBox.y;
+                let newY;
+                if (localY < topSliceHeight) {
+                    newY = localY * scaleX;
+                } else if (localY > origViewBox.height - bottomSliceHeight) {
+                    const fromBottom = origViewBox.height - localY;
+                    newY = svgHeight - (fromBottom * scaleX);
+                } else {
+                    const middleLocalY = localY - topSliceHeight;
+                    const middleRatio = middleLocalY / origMiddleHeight;
+                    newY = fixedTopHeight + (middleRatio * stretchedMiddleHeight);
+                }
+                return { x: newX, y: newY };
+            }
+
+            const circles = [];
+            const numCircles = 120;
+            const baseRadius = 18;
+            const radiusVariation = 10;
+            const waveFrequency = 10;
+            const waveAmplitude = 12 * Math.min(scaleX, scaleY);
+            const corners = [0, 0.25, 0.5, 0.75];
+            const cornerRadius = 0.06;
+            const cornerSizeBoost = 1.4;
+
+            function getCornerFactor(t) {
+                let maxFactor = 0;
+                for (const corner of corners) {
+                    const dist = Math.min(Math.abs(t - corner), Math.abs(t - corner + 1), Math.abs(t - corner - 1));
+                    if (dist < cornerRadius) {
+                        maxFactor = Math.max(maxFactor, 1 - (dist / cornerRadius));
+                    }
+                }
+                return maxFactor;
+            }
+
+            const wavePoints = [];
+            const fillResolution = 120;
+            for (let i = 0; i < fillResolution; i++) {
+                const t = i / fillResolution;
+                const point = pathEl.getPointAtLength(t * pathLength);
+                const nextT = Math.min(t + 0.001, 1);
+                const nextPoint = pathEl.getPointAtLength(nextT * pathLength);
+                const dx = nextPoint.x - point.x;
+                const dy = nextPoint.y - point.y;
+                const len = Math.sqrt(dx * dx + dy * dy) || 1;
+                const normalX = dy / len;
+                const normalY = -dx / len;
+                const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
+                wavePoints.push(transformPoint(point.x + normalX * waveOffset, point.y + normalY * waveOffset));
+            }
+
+            let waveFillD = `M${wavePoints[0].x},${wavePoints[0].y}`;
+            for (let i = 1; i < wavePoints.length; i++) {
+                const prev = wavePoints[i - 1];
+                const curr = wavePoints[i];
+                waveFillD += ` Q${prev.x},${prev.y} ${(prev.x + curr.x) / 2},${(prev.y + curr.y) / 2}`;
+            }
+            waveFillD += ` Q${wavePoints[wavePoints.length - 1].x},${wavePoints[wavePoints.length - 1].y} ${wavePoints[0].x},${wavePoints[0].y} Z`;
+
+            const waveFillPath = document.createElementNS(svgNS, 'path');
+            waveFillPath.setAttribute('d', waveFillD);
+            waveFillPath.setAttribute('fill', 'white');
+            svg.appendChild(waveFillPath);
+
+            for (let i = 0; i < numCircles; i++) {
+                const t = i / numCircles;
+                const point = pathEl.getPointAtLength(t * pathLength);
+                const nextT = Math.min(t + 0.001, 1);
+                const nextPoint = pathEl.getPointAtLength(nextT * pathLength);
+                const dx = nextPoint.x - point.x;
+                const dy = nextPoint.y - point.y;
+                const len = Math.sqrt(dx * dx + dy * dy) || 1;
+                const normalX = dy / len;
+                const normalY = -dx / len;
+                const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
+                const transformed = transformPoint(point.x + normalX * waveOffset, point.y + normalY * waveOffset);
+                const cornerFactor = getCornerFactor(t);
+                const sizeMultiplier = 1 + (cornerSizeBoost - 1) * cornerFactor;
+                const radius = (baseRadius + (Math.random() - 0.5) * radiusVariation * 2) * sizeMultiplier;
+
+                const circle = document.createElementNS(svgNS, 'circle');
+                circle.setAttribute('cx', transformed.x);
+                circle.setAttribute('cy', transformed.y);
+                circle.setAttribute('r', radius);
+                circle.setAttribute('fill', 'white');
+                circles.push({ el: circle, baseRadius: radius, phase: Math.random() * Math.PI * 2, speed: 0.5 + Math.random() * 1.5, jitterAmount: 0.08 + Math.random() * 0.12 });
+                svg.appendChild(circle);
+            }
+
+            svg.removeChild(pathEl);
+
+            function animateCircles(time) {
+                circles.forEach(c => {
+                    const jitter = 1 + Math.sin(time * 0.001 * c.speed + c.phase) * c.jitterAmount;
+                    c.el.setAttribute('r', c.baseRadius * jitter);
+                });
+                requestAnimationFrame(animateCircles);
+            }
+            requestAnimationFrame(animateCircles);
+        })();
+
+        const API_URL = 'https://auth.poptropica.club/api/auth/login';
+        const SSO_SYNC_URL = 'https://auth.poptropica.club/sso/sync';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect');
+        const platform = urlParams.get('platform');
+
+        if (platform) {
+            const redirectInfo = document.getElementById('redirectInfo');
+            const redirectTarget = document.getElementById('redirectTarget');
+            const platformNames = {
+                'wordpress': "Developers' Blog",
+                'mediawiki': 'Poptropica Wiki',
+                'blog': "Developers' Blog",
+                'wiki': 'Poptropica Wiki'
+            };
+            redirectTarget.textContent = platformNames[platform] || platform;
+            redirectInfo.style.display = 'block';
+        }
+
+        const form = document.getElementById('form');
+        const identifierInput = document.getElementById('identifier');
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('loginError');
+        const submitBtn = document.getElementById('submitBtn');
+        const loginFormDiv = document.getElementById('loginForm');
+        const loginSuccessDiv = document.getElementById('loginSuccess');
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('visible');
+        }
+
+        function hideError() {
+            errorDiv.classList.remove('visible');
+        }
+
+        function clearValidation() {
+            identifierInput.classList.remove('invalid');
+            passwordInput.classList.remove('invalid');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearValidation();
+            hideError();
+
+            const identifier = identifierInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!identifier) {
+                identifierInput.classList.add('invalid');
+                showError('Please enter your username or email.');
+                identifierInput.focus();
+                return;
+            }
+
+            if (!password) {
+                passwordInput.classList.add('invalid');
+                showError('Please enter your password.');
+                passwordInput.focus();
+                return;
+            }
+
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password, platform: platform || 'passport' })
+                });
+
+                const responseText = await response.text();
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (parseError) {
+                    showError('Server error. Please try again later.');
+                    return;
+                }
+
+                if (response.ok && result.success) {
+                    loginFormDiv.classList.add('hidden');
+                    loginSuccessDiv.classList.remove('hidden');
+                    localStorage.setItem('pc_auth_token', result.token);
+                    localStorage.setItem('pc_auth_user', JSON.stringify(result.user));
+                    const finalRedirect = redirectUrl || 'https://poptropica.club/passport/';
+                    window.location.href = SSO_SYNC_URL + '?token=' + encodeURIComponent(result.token) + '&redirect=' + encodeURIComponent(finalRedirect);
+                } else {
+                    showError(result.message || 'Login failed. Please check your credentials.');
+                }
+            } catch (error) {
+                if (error.name === 'TypeError') {
+                    showError('Network error. Please check your connection.');
+                } else {
+                    showError('Error: ' + error.message);
+                }
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        });
+
+        identifierInput.addEventListener('input', () => {
+            identifierInput.classList.remove('invalid');
+            hideError();
+        });
+
+        passwordInput.addEventListener('input', () => {
+            passwordInput.classList.remove('invalid');
+            hideError();
+        });
+
+        identifierInput.focus();
+    </script>
+</body>
+</html>
