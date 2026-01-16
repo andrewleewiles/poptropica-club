@@ -336,10 +336,13 @@ body {
 /* Tagline */
 .tagline {
     font-family: 'Creabbrg', Arial, sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.6rem;
     color: #000;
     text-align: center;
-    margin-top: 20px;
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    margin-top: -320px;
     letter-spacing: 0.5px;
 }
 
@@ -498,9 +501,9 @@ body {
     }
 
     .tagline {
-        font-size: 0.9rem;
-        margin-top: 15px;
-        padding: 0 10px;
+        font-size: 1.1rem;
+        margin-top: -280px;
+        padding: 0 15px;
     }
 
     .footer-logo {
