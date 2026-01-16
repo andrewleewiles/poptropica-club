@@ -333,6 +333,16 @@ body {
     transform: scale(0.98);
 }
 
+/* Tagline */
+.tagline {
+    font-family: 'Creabbrg', Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #000;
+    text-align: center;
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+}
+
 @keyframes buttonWobble {
     0%, 100% { transform: scale(1) rotate(0deg); }
     25% { transform: scale(1.04) rotate(-1deg); }
@@ -485,6 +495,12 @@ body {
 
     .button-nav {
         gap: 5px;
+    }
+
+    .tagline {
+        font-size: 0.9rem;
+        margin-top: 15px;
+        padding: 0 10px;
     }
 
     .footer-logo {

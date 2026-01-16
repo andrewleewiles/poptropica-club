@@ -7,6 +7,7 @@
     <meta name="description" content="Welcome to Poptropica Club! Download Poptropica Legacy, join our community, and explore the islands.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
     <div class="page-wrapper">
@@ -50,7 +51,7 @@
                                 <img src="buttons/legacyButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="#" class="nav-button" id="btn-join">
+                            <a href="../join/" class="nav-button" id="btn-join">
                                 <img src="buttons/joinButton.png" alt="Join the Club" class="btn-normal">
                                 <img src="buttons/joinButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
@@ -85,6 +86,8 @@
                                 <img src="buttons/supportButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
                         </nav>
+
+                        <p class="tagline">The definitive fan community for Poptropica enthusiasts</p>
                     </div>
                 </div>
             </div>
@@ -138,6 +141,9 @@
                         <span class="checkbox-text">Send me Poptropica Club newsletters and updates</span>
                     </label>
                 </div>
+                <div class="form-group turnstile-container">
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAACMuEmt_i5eiKoTc" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired"></div>
+                </div>
                 <div class="form-error" id="joinError"></div>
                 <button type="submit" class="join-submit-btn">
                     <span class="btn-text">Create Account</span>
@@ -151,6 +157,7 @@
                 <h3>Check Your Email!</h3>
                 <p>We've sent a verification link to <span id="successEmail"></span>.</p>
                 <p>Click the link in the email to activate your account.</p>
+                <p style="margin-top: 12px; font-size: 13px; opacity: 0.85;">Don't see it? Check your Spam or Junk folder.</p>
             </div>
         </div>
     </div>
@@ -178,7 +185,7 @@
                     <span class="btn-loading">Logging in...</span>
                 </button>
             </form>
-            <p class="join-login-link">Not a member? <a href="#" id="switchToJoin">Join the Club</a></p>
+            <p class="join-login-link">Not a member? <a href="../join/">Join the Club</a></p>
             <p class="join-login-link forgot-link"><a href="#" id="forgotPasswordLink">Forgot password?</a></p>
         </div>
     </div>
@@ -582,6 +589,17 @@
         });
 
         // ========================================
+        // Turnstile Callbacks (global scope)
+        // ========================================
+        let turnstileToken = null;
+        function onTurnstileSuccess(token) {
+            turnstileToken = token;
+        }
+        function onTurnstileExpired() {
+            turnstileToken = null;
+        }
+
+        // ========================================
         // Join the Club Registration Modal
         // ========================================
         (function() {
@@ -603,11 +621,7 @@
             // API endpoint - Central Auth Service
             const API_URL = 'https://auth.poptropica.club/api/auth/register';
 
-            // Open modal
-            joinBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                openModal();
-            });
+            // Join button now links to /join/ page directly
 
             // Close modal - X button
             closeBtn.addEventListener('click', closeModal);
@@ -643,6 +657,11 @@
                     popup.classList.remove('success');
                     hideError();
                     clearValidation();
+                    // Reset Turnstile
+                    turnstileToken = null;
+                    if (window.turnstile) {
+                        turnstile.reset();
+                    }
                 }, 300);
             }
 
@@ -728,6 +747,12 @@
                     return false;
                 }
 
+                // Turnstile validation
+                if (!turnstileToken) {
+                    showError('Please complete the security check.');
+                    return false;
+                }
+
                 return true;
             }
 
@@ -749,7 +774,8 @@
                     username: usernameInput.value.trim(),
                     password: passwordInput.value,
                     birthdate: birthdateInput.value,
-                    newsletter: newsletterInput.checked
+                    newsletter: newsletterInput.checked,
+                    turnstile: turnstileToken
                 };
 
                 try {
@@ -860,16 +886,7 @@
                 });
             }
 
-            // Switch to join modal
-            document.getElementById('switchToJoin').addEventListener('click', (e) => {
-                e.preventDefault();
-                closeModal();
-                setTimeout(() => {
-                    document.getElementById('joinModal').classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    document.getElementById('join-email').focus();
-                }, 350);
-            });
+            // "Join the Club" link now goes directly to /join/ page
 
             // Hidden iframe auth handler
             function performIframeAuth(wpUrl, mwUrl) {
