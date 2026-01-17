@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=0.3, maximum-scale=3, user-scalable=yes">
+    <title>Import Profile - Poptropica Club</title>
+    <meta name="description" content="Import or create a new game profile for Poptropica Legacy.">
+    <link rel="icon" type="image/png" href="../../shared/siteIcon.png">
+    <style>
+        @font-face {
+            font-family: 'GrilledCheese';
+            src: url('../../shared/fonts/GrilledCheeseBTNRegular.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'Creabbrg';
+            src: url('../../shared/fonts/CREABBRG.TTF') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Creabbrg', Arial, sans-serif;
+            min-height: 100vh;
+            background-image: url('../../shared/pageBg.png');
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px 40px 20px;
+        }
+
+        .logo {
+            max-width: 350px;
+            width: 90%;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            margin: -15px 0 -15px 0;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        [data-animate="logo-part"] {
+            transform-origin: center center;
+            --logo-push-x: 0px;
+            --logo-push-y: 0px;
+            --logo-push-rotate: 0deg;
+        }
+
+        @keyframes logoFloat1 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-4px) rotate(2deg); }
+        }
+        @keyframes logoFloat2 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-5px) rotate(-2deg); }
+        }
+        @keyframes logoFloat3 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-3px) rotate(1.5deg); }
+        }
+        @keyframes logoFloat4 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-5px) rotate(-2.5deg); }
+        }
+        @keyframes logoFloat5 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-6px) rotate(2deg); }
+        }
+        @keyframes logoFloat6 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-4px) rotate(-1.5deg); }
+        }
+        @keyframes logoFloat7 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-5px) rotate(3deg); }
+        }
+        @keyframes logoFloat8 {
+            0%, 100% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(0) rotate(0deg); }
+            50% { transform: translate(var(--logo-push-x), var(--logo-push-y)) rotate(var(--logo-push-rotate)) translateY(-3px) rotate(-2deg); }
+        }
+
+        .import-container {
+            position: relative;
+            padding: 40px 50px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .cloud-border-svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1;
+            overflow: visible;
+        }
+
+        .import-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .import-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .import-header img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+
+        .import-header h1 {
+            font-family: 'GrilledCheese', Arial, sans-serif;
+            font-size: 28px;
+            color: #2d7dd2;
+            margin-bottom: 8px;
+        }
+
+        .import-header p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .welcome-name {
+            color: #2d7dd2;
+            font-weight: bold;
+        }
+
+        .import-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .import-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            background: #f8f9fa;
+            border: 3px solid transparent;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .import-option:hover {
+            background: #e9ecef;
+            border-color: #2d7dd2;
+            transform: translateY(-2px);
+        }
+
+        .import-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .import-option.disabled:hover {
+            background: #f8f9fa;
+            border-color: transparent;
+            transform: none;
+        }
+
+        .option-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .option-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+        }
+
+        .option-icon.green { background: linear-gradient(180deg, #7ed321 0%, #5cb500 100%); }
+        .option-icon.blue { background: linear-gradient(180deg, #0098f5 0%, #0077cc 100%); }
+        .option-icon.purple { background: linear-gradient(180deg, #9b59b6 0%, #8e44ad 100%); }
+        .option-icon.orange { background: linear-gradient(180deg, #f5a623 0%, #e09000 100%); }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-title {
+            font-family: 'GrilledCheese', Arial, sans-serif;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .option-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: #e74c3c;
+            color: #fff;
+            border-radius: 10px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .option-badge.coming-soon {
+            background: #95a5a6;
+        }
+
+        .option-arrow {
+            width: 24px;
+            height: 24px;
+            fill: #ccc;
+            flex-shrink: 0;
+            transition: fill 0.2s, transform 0.2s;
+        }
+
+        .import-option:hover .option-arrow {
+            fill: #2d7dd2;
+            transform: translateX(4px);
+        }
+
+        .import-option.disabled:hover .option-arrow {
+            fill: #ccc;
+            transform: none;
+        }
+
+        /* File upload area */
+        .file-upload-area {
+            display: none;
+            margin-top: 20px;
+            padding: 30px 20px;
+            border: 3px dashed #ddd;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload-area.visible {
+            display: block;
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.dragover {
+            border-color: #2d7dd2;
+            background: #f0f8ff;
+        }
+
+        .file-upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            fill: #999;
+        }
+
+        .file-upload-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .file-upload-hint {
+            font-size: 11px;
+            color: #999;
+        }
+
+        /* Message */
+        .message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .message.error {
+            background: #ffe0e0;
+            color: #c0392b;
+            display: block;
+        }
+
+        .message.success {
+            background: #e0ffe0;
+            color: #27ae60;
+            display: block;
+        }
+
+        /* Back link */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #2d7dd2;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Loading state */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        .loading-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #2d7dd2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Animated Logo -->
+    <a href="../../landing/" style="text-decoration: none; display: flex; justify-content: center; width: 100%;">
+        <div id="logo-container" class="logo" role="img" aria-label="Poptropica Club"></div>
+    </a>
+
+    <div class="import-container">
+        <!-- Dynamic Cloud Border -->
+        <svg class="cloud-border-svg" aria-hidden="true"></svg>
+
+        <div class="import-content">
+            <div class="import-header">
+                <img src="../../shared/popPassportLogo@3x.png" alt="Poptropica Passport">
+                <h1>Welcome to Poptropica Legacy!</h1>
+                <p>Hi <span id="welcomeName" class="welcome-name">there</span>! Choose how you'd like to set up your game profile.</p>
+            </div>
+
+            <div class="import-options">
+                <!-- Create New / Use Existing Local Data -->
+                <div class="import-option" id="optionCreateNew">
+                    <div class="option-icon green">
+                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </div>
+                    <div class="option-content">
+                        <div class="option-title" id="createNewTitle">Start Fresh</div>
+                        <div class="option-desc" id="createNewDesc">Create a brand new Poptropican and begin your adventure!</div>
+                    </div>
+                    <svg class="option-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+
+                <!-- Import from Poptropica.com -->
+                <div class="import-option disabled" id="optionPoptropicaCom">
+                    <div class="option-icon blue">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <div class="option-content">
+                        <div class="option-title">Import from Poptropica.com <span class="option-badge coming-soon">Coming Soon</span></div>
+                        <div class="option-desc">Transfer your progress from the official Poptropica game.</div>
+                    </div>
+                    <svg class="option-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+
+                <!-- Import from File -->
+                <div class="import-option" id="optionImportFile">
+                    <div class="option-icon purple">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.01l1.41 1.41L11 14.84V19h2v-4.16l1.59 1.59L16 15.01 12.01 11 8 15.01z"/></svg>
+                    </div>
+                    <div class="option-content">
+                        <div class="option-title">Import from File</div>
+                        <div class="option-desc">Upload a previously exported profile JSON file.</div>
+                    </div>
+                    <svg class="option-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+            </div>
+
+            <!-- File Upload Area (shown when import from file is selected) -->
+            <div class="file-upload-area" id="fileUploadArea">
+                <svg class="file-upload-icon" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                <div class="file-upload-text">Click to select or drag a profile JSON file here</div>
+                <div class="file-upload-hint">Exported profile files from Poptropica Legacy</div>
+                <input type="file" id="fileInput" accept=".json,application/json" hidden>
+            </div>
+
+            <div class="message" id="message"></div>
+
+            <a href="../" class="back-link">Back to My Passport</a>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Setting up your profile...</div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://auth.poptropica.club/api/auth';
+        const PLAY_URL = 'https://play.poptropica.club';
+
+        let currentUser = null;
+        let authToken = null;
+        let hasLocalProfile = false;
+        let localProfileData = null;
+
+        // Check for auth and local profile on load
+        async function init() {
+            // Get auth token from URL or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            authToken = urlParams.get('auth_token') || localStorage.getItem('pc_auth_token');
+
+            if (!authToken) {
+                // Not logged in, redirect to login
+                window.location.href = '../';
+                return;
+            }
+
+            // Validate token and get user info
+            try {
+                const response = await fetch(`${API_BASE}/validate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                const data = await response.json();
+
+                if (!data.success) {
+                    window.location.href = '../';
+                    return;
+                }
+
+                currentUser = data.user;
+                localStorage.setItem('pc_auth_token', authToken);
+                localStorage.setItem('pc_auth_user', JSON.stringify(currentUser));
+
+                // Clean URL
+                if (urlParams.has('auth_token')) {
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
+
+                // Update welcome name
+                document.getElementById('welcomeName').textContent = currentUser.username || 'there';
+
+                // Check for local profile data
+                checkLocalProfile();
+
+            } catch (error) {
+                console.error('Auth validation failed:', error);
+                window.location.href = '../';
+            }
+        }
+
+        function checkLocalProfile() {
+            // Check localStorage for existing profile data
+            try {
+                const profilesJson = localStorage.getItem('poptropica_profiles');
+                if (profilesJson) {
+                    const profiles = JSON.parse(profilesJson);
+                    const profileIds = Object.keys(profiles);
+
+                    if (profileIds.length > 0) {
+                        // Find the most recently used profile
+                        const currentId = localStorage.getItem('poptropica_current_profile');
+                        const profileId = currentId && profiles[currentId] ? currentId : profileIds[0];
+                        localProfileData = profiles[profileId];
+
+                        if (localProfileData && localProfileData.data) {
+                            hasLocalProfile = true;
+
+                            // Update UI to show "Continue with existing" option
+                            document.getElementById('createNewTitle').textContent = 'Continue with Current Progress';
+                            document.getElementById('createNewDesc').textContent = 'Use your existing save data from this browser and sync it to your account.';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error checking local profile:', e);
+            }
+        }
+
+        // Option: Create New / Continue with Local
+        document.getElementById('optionCreateNew').addEventListener('click', async () => {
+            showLoading(hasLocalProfile ? 'Syncing your progress...' : 'Creating new profile...');
+
+            try {
+                if (hasLocalProfile && localProfileData) {
+                    // Migrate local profile to server
+                    const response = await fetch(`${API_BASE}/game/profile/migrate`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({
+                            guest_profile_data: localProfileData.data,
+                            profile_name: localProfileData.name || 'Default'
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Redirect to play with token
+                        window.location.href = `${PLAY_URL}?auth_token=${authToken}`;
+                    } else {
+                        hideLoading();
+                        showMessage('Failed to sync profile: ' + (data.message || 'Unknown error'), 'error');
+                    }
+                } else {
+                    // No local profile, just redirect - the game will create a fresh start
+                    window.location.href = `${PLAY_URL}?auth_token=${authToken}`;
+                }
+            } catch (error) {
+                hideLoading();
+                showMessage('Network error. Please try again.', 'error');
+            }
+        });
+
+        // Option: Import from File
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        document.getElementById('optionImportFile').addEventListener('click', () => {
+            fileUploadArea.classList.toggle('visible');
+        });
+
+        fileUploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.add('dragover');
+        });
+
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.classList.remove('dragover');
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFileImport(file);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleFileImport(file);
+        });
+
+        /**
+         * Parse profile file content - handles multiple formats like the desktop version
+         * Supports: Flash Player export, Char.data (SharedObject), nested format, flat format, version 2 with rawSO
+         */
+        function parseProfileFile(content) {
+            // Helper to convert string numbers to actual numbers
+            const toNumber = (val, defaultVal = 0) => {
+                if (val === undefined || val === null || val === 'undefined') return defaultVal;
+                const num = parseInt(val, 10);
+                return isNaN(num) ? defaultVal : num;
+            };
+
+            // Helper for frame values (can be strings or numbers)
+            const toFrameValue = (val, defaultVal = 1) => {
+                if (val === undefined || val === null || val === 'undefined') return defaultVal;
+                const num = parseInt(val, 10);
+                if (!isNaN(num) && String(num) === String(val)) return num;
+                return val;
+            };
+
+            // Check if data looks like a valid profile
+            const isValidProfile = (data) => {
+                if (!data || typeof data !== 'object') return false;
+                if (data.version === 1 || data.version === 2) return true;
+                if (data.skinColor !== undefined || data.hairColor !== undefined) return true;
+                if (data.character || data.progress || data.user) return true;
+                if (data.inventory || data.completedEvents) return true;
+                if ((data.firstName && data.lastName) || (data.avatarFirstName && data.avatarLastName)) return true;
+                if (data.Char && data.Char.data) return true;
+                return false;
+            };
+
+            // Transform Char.data format (SharedObject/Flash Player export)
+            const transformCharData = (legacyData) => {
+                const charData = legacyData.Char?.data || {};
+                const lastScene = legacyData.lastScene?.data || {};
+
+                console.log('[Import] Transforming Char.data format, character:', charData.firstName, charData.lastName);
+
+                return {
+                    version: 2,
+                    profileName: `${charData.firstName || charData.avatarFirstName || 'Unknown'} ${charData.lastName || charData.avatarLastName || 'Poptropican'}`,
+                    imported: new Date().toISOString(),
+                    importedFrom: 'flash_export',
+
+                    // User data
+                    login: charData.login || 'Guest',
+                    dbid: charData.dbid || '',
+                    Registred: charData.Registred || false,
+                    age: toNumber(charData.age, 10),
+                    firstName: charData.firstName || charData.avatarFirstName || '',
+                    lastName: charData.lastName || charData.avatarLastName || '',
+                    mem_status: charData.mem_status || charData.memstatus || 'active-renew',
+
+                    // Gender
+                    gender: toNumber(charData.gender, 1),
+
+                    // Appearance
+                    skinColor: toNumber(charData.skinColor, 5878232),
+                    hairColor: toNumber(charData.hairColor, 2238750),
+                    lineColor: toNumber(charData.lineColor, 4689324),
+                    lineWidth: toNumber(charData.lineWidth, 2),
+                    eyelidPos: toNumber(charData.eyelidPos, 0),
+                    eyesFrame: toFrameValue(charData.eyesFrame, 5),
+                    marksFrame: toFrameValue(charData.marksFrame, 1),
+                    pantsFrame: toFrameValue(charData.pantsFrame, 7),
+                    shirtFrame: toFrameValue(charData.shirtFrame, 9),
+                    hairFrame: toFrameValue(charData.hairFrame, 10),
+                    mouthFrame: toFrameValue(charData.mouthFrame, 11),
+                    itemFrame: toFrameValue(charData.itemFrame, 1),
+                    packFrame: toFrameValue(charData.packFrame, 1),
+                    facialFrame: toFrameValue(charData.facialFrame, 1),
+                    overshirtFrame: toFrameValue(charData.overshirtFrame, 1),
+                    overpantsFrame: toFrameValue(charData.overpantsFrame, 1),
+
+                    // Special ability
+                    specialAbility: Array.isArray(charData.specialAbility) ? charData.specialAbility[0] || 'none' : charData.specialAbility || 'none',
+
+                    // Progress data
+                    visited: charData.visited || '',
+                    games: charData.games || '',
+                    inventory: charData.inventory || {},
+                    completedEvents: charData.completedEvents || {},
+                    removedItems: charData.removedItems || {},
+                    islandCompletions: charData.islandCompletions || {},
+
+                    // Location
+                    lastIsland: lastScene.island || charData.lastIsland || 'Early',
+                    lastRoom: lastScene.scene || charData.lastRoom || 'City2',
+
+                    // Economy
+                    credits: toNumber(charData.credits, 0),
+
+                    // User data (island-specific)
+                    userData: charData.userData || {},
+
+                    // Raw backup
+                    rawSO: charData
+                };
+            };
+
+            // Transform nested format (character, progress, user)
+            const transformNestedFormat = (data) => {
+                const look = (data.character?.look || '').split(',');
+
+                console.log('[Import] Transforming nested format');
+
+                return {
+                    version: 1,
+                    profileName: data.user?.login || 'Imported',
+                    imported: new Date().toISOString(),
+
+                    login: data.user?.login || '',
+                    dbid: data.user?.dbid || '',
+                    Registred: !!data.user?.dbid,
+                    age: data.user?.age || 10,
+                    gender: parseInt(look[0]) || 1,
+                    firstName: data.user?.firstName || '',
+                    lastName: data.user?.lastName || '',
+
+                    // Appearance from look array
+                    skinColor: parseInt(look[1]) || 5878232,
+                    hairColor: parseInt(look[2]) || 2238750,
+                    lineColor: parseInt(look[3]) || 4689324,
+                    eyelidPos: parseInt(look[4]) || 0,
+                    eyesFrame: parseInt(look[5]) || 5,
+                    marksFrame: parseInt(look[6]) || 1,
+                    pantsFrame: look[7] || 7,
+                    lineWidth: parseInt(look[8]) || 2,
+                    shirtFrame: look[9] || 9,
+                    hairFrame: look[10] || 10,
+                    mouthFrame: look[11] || 11,
+                    itemFrame: look[12] || 1,
+                    packFrame: look[13] || 1,
+                    facialFrame: look[14] || 1,
+                    overshirtFrame: look[15] || 1,
+                    overpantsFrame: look[16] || 1,
+
+                    // Progress
+                    visited: data.progress?.visited || '',
+                    games: data.progress?.games || '',
+                    inventory: data.progress?.inventory || {},
+                    completedEvents: data.progress?.completedEvents || {},
+
+                    // Location
+                    lastIsland: data.location?.lastIsland || 'Early',
+                    lastRoom: data.location?.lastRoom || 'City2',
+
+                    credits: data.progress?.credits || 0,
+                    userData: data.userData || {}
+                };
+            };
+
+            try {
+                // Try standard JSON parse first
+                let jsonData;
+                try {
+                    jsonData = JSON.parse(content);
+                } catch (e) {
+                    // Try Flash Player export format (multi-line: version, type, json)
+                    const lines = content.trim().split('\n');
+                    if (lines.length >= 3 && lines[1] === 'json') {
+                        const jsonStr = lines.slice(2).join('\n');
+                        jsonData = JSON.parse(jsonStr);
+                        console.log('[Import] Detected Flash Player multi-line export format');
+                    } else {
+                        throw e;
+                    }
+                }
+
+                // Check for Char.data format (SharedObject export)
+                if (jsonData.Char && jsonData.Char.data) {
+                    console.log('[Import] Detected Char.data (SharedObject) format');
+                    return transformCharData(jsonData);
+                }
+
+                // Check for version 2 format (desktop app format with nested appearance/user/progress)
+                if (jsonData.version === 2 || (jsonData.appearance && jsonData.rawSO)) {
+                    console.log('[Import] Detected version 2 profile, flattening...');
+                    // Flatten the nested structure for browser compatibility
+                    const appearance = jsonData.appearance || {};
+                    const user = jsonData.user || {};
+                    const progress = jsonData.progress || {};
+                    const economy = jsonData.economy || {};
+                    const rawSO = jsonData.rawSO || {};
+
+                    const flattened = {
+                        version: 2,
+                        profileName: jsonData.profileName || `${user.firstName || rawSO.firstName || 'Unknown'} ${user.lastName || rawSO.lastName || 'Poptropican'}`,
+                        imported: new Date().toISOString(),
+                        importedFrom: 'desktop_v2',
+
+                        // User data
+                        login: user.login || rawSO.login || 'Guest',
+                        dbid: user.dbid || rawSO.dbid || '',
+                        Registred: user.Registred || rawSO.Registred || jsonData.Registred || false,
+                        age: toNumber(user.age || rawSO.age, 10),
+                        firstName: user.firstName || rawSO.firstName || '',
+                        lastName: user.lastName || rawSO.lastName || '',
+                        mem_status: user.mem_status || rawSO.mem_status || 'active-renew',
+                        gender: toNumber(appearance.gender || rawSO.gender, 1),
+
+                        // Appearance - prefer appearance object, fall back to rawSO
+                        skinColor: toNumber(appearance.skinColor || rawSO.skinColor, 5878232),
+                        hairColor: toNumber(appearance.hairColor || rawSO.hairColor, 2238750),
+                        lineColor: toNumber(appearance.lineColor || rawSO.lineColor, 4689324),
+                        lineWidth: toNumber(appearance.lineWidth || rawSO.lineWidth, 2),
+                        eyelidPos: toNumber(appearance.eyelidPos || rawSO.eyelidPos, 0),
+                        eyesFrame: toFrameValue(appearance.eyesFrame || rawSO.eyesFrame, 5),
+                        marksFrame: toFrameValue(appearance.marksFrame || rawSO.marksFrame, 1),
+                        pantsFrame: toFrameValue(appearance.pantsFrame || rawSO.pantsFrame, 7),
+                        shirtFrame: toFrameValue(appearance.shirtFrame || rawSO.shirtFrame, 9),
+                        hairFrame: toFrameValue(appearance.hairFrame || rawSO.hairFrame, 10),
+                        mouthFrame: toFrameValue(appearance.mouthFrame || rawSO.mouthFrame, 11),
+                        itemFrame: toFrameValue(appearance.itemFrame || rawSO.itemFrame, 1),
+                        packFrame: toFrameValue(appearance.packFrame || rawSO.packFrame, 1),
+                        facialFrame: toFrameValue(appearance.facialFrame || rawSO.facialFrame, 1),
+                        overshirtFrame: toFrameValue(appearance.overshirtFrame || rawSO.overshirtFrame, 1),
+                        overpantsFrame: toFrameValue(appearance.overpantsFrame || rawSO.overpantsFrame, 1),
+                        specialAbility: appearance.specialAbility || rawSO.specialAbility || 'none',
+                        specialAbilityParams: appearance.specialAbilityParams || rawSO.specialAbilityParams || [],
+
+                        // Progress
+                        visited: progress.visited || rawSO.visited || '',
+                        games: progress.games || rawSO.games || '',
+                        inventory: progress.inventory || rawSO.inventory || {},
+                        completedEvents: progress.completedEvents || rawSO.completedEvents || {},
+                        removedItems: progress.removedItems || rawSO.removedItems || {},
+                        islandCompletions: progress.islandCompletions || rawSO.islandCompletions || {},
+                        islandTimes: progress.islandTimes || rawSO.islandTimes || {},
+                        updatedIslands: progress.updatedIslands || rawSO.updatedIslands || {},
+
+                        // Location
+                        lastIsland: jsonData.lastIsland || rawSO.lastIsland || 'Early',
+                        lastRoom: jsonData.lastRoom || rawSO.lastRoom || 'City2',
+                        lastCharX: jsonData.lastCharX || rawSO.lastCharX || 0,
+                        lastCharY: jsonData.lastCharY || rawSO.lastCharY || 0,
+
+                        // Economy
+                        credits: toNumber(economy.credits || rawSO.credits, 0),
+
+                        // Island-specific data
+                        userData: jsonData.userData || rawSO.userData || {},
+
+                        // Keep rawSO as backup
+                        rawSO: rawSO
+                    };
+
+                    console.log('[Import] Flattened profile, skinColor:', flattened.skinColor);
+                    return flattened;
+                }
+
+                // Check for version 1 or flat format with appearance data
+                if (jsonData.version === 1 || jsonData.skinColor !== undefined) {
+                    console.log('[Import] Detected version 1 or flat format profile');
+                    return jsonData;
+                }
+
+                // Check for nested format (character, progress, user)
+                if (jsonData.character || jsonData.progress || jsonData.user) {
+                    console.log('[Import] Detected nested format');
+                    return transformNestedFormat(jsonData);
+                }
+
+                // Validate it looks like a profile
+                if (isValidProfile(jsonData)) {
+                    console.log('[Import] Profile appears valid, using as-is');
+                    return jsonData;
+                }
+
+                console.warn('[Import] Could not identify profile format, keys:', Object.keys(jsonData));
+                return null;
+            } catch (e) {
+                console.error('[Import] Parse error:', e);
+                return null;
+            }
+        }
+
+        async function handleFileImport(file) {
+            if (!file.name.endsWith('.json')) {
+                showMessage('Please select a JSON file.', 'error');
+                return;
+            }
+
+            showLoading('Importing profile...');
+
+            try {
+                const text = await file.text();
+                console.log('[Import] File size:', text.length, 'bytes');
+
+                // Parse and normalize the profile data
+                const profileData = parseProfileFile(text);
+
+                if (!profileData) {
+                    hideLoading();
+                    showMessage('Could not parse profile file. Make sure it\'s a valid Poptropica profile export.', 'error');
+                    return;
+                }
+
+                console.log('[Import] Parsed profile data keys:', Object.keys(profileData));
+                console.log('[Import] Profile name:', profileData.profileName || profileData.login || 'Unknown');
+                console.log('[Import] Has skinColor:', profileData.skinColor !== undefined);
+
+                // Migrate the imported profile to server
+                const requestBody = JSON.stringify({
+                    guest_profile_data: profileData,
+                    profile_name: profileData.profileName || profileData.login || file.name.replace('.json', '') || 'Imported Profile'
+                });
+                console.log('[Import] Request body size:', requestBody.length, 'bytes');
+
+                const response = await fetch(`${API_BASE}/game/profile/migrate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: requestBody
+                });
+
+                console.log('[Import] Response status:', response.status);
+                console.log('[Import] Response headers:', [...response.headers.entries()]);
+
+                const responseText = await response.text();
+                console.log('[Import] Raw response:', responseText.substring(0, 500));
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    hideLoading();
+                    showMessage('Server returned invalid response. Check console for details.', 'error');
+                    return;
+                }
+                console.log('[Import] Server response:', data);
+
+                if (data.success) {
+                    // Redirect to play with token
+                    window.location.href = `${PLAY_URL}?auth_token=${authToken}`;
+                } else {
+                    hideLoading();
+                    showMessage('Failed to import profile: ' + (data.message || data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('[Import] Error:', error);
+                hideLoading();
+                showMessage('Failed to import: ' + error.message, 'error');
+            }
+        }
+
+        function showLoading(text) {
+            document.getElementById('loadingText').textContent = text || 'Loading...';
+            document.getElementById('loadingOverlay').classList.add('visible');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('visible');
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = 'message ' + type;
+        }
+
+        // Load animated logo
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../../shared/pcLogo2.svg', true);
+        xhr.onload = function() {
+            if (xhr.status === 200 || xhr.status === 0) {
+                const logoContainer = document.getElementById('logo-container');
+                logoContainer.innerHTML = xhr.responseText;
+
+                const logoParts = logoContainer.querySelectorAll('[data-animate="logo-part"]');
+                logoParts.forEach((part, i) => {
+                    const animIndex = (i % 8) + 1;
+                    const delay = (i * 0.15) % 2;
+                    part.style.animation = `logoFloat${animIndex} ${1.7 + (i % 8) * 0.1}s ease-in-out infinite`;
+                    part.style.animationDelay = `${delay}s`;
+                });
+            }
+        };
+        xhr.send();
+
+        // Dynamic Cloud Border (simplified version)
+        async function initCloudBorder() {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.querySelector('.cloud-border-svg');
+            const container = document.querySelector('.import-container');
+            if (!svg || !container) return;
+
+            svg.innerHTML = '';
+
+            const response = await fetch('../../shared/cloudPath.svg');
+            const svgText = await response.text();
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+            const cloudPath = svgDoc.querySelector('path').getAttribute('d');
+
+            const containerRect = container.getBoundingClientRect();
+            const svgWidth = containerRect.width + 80;
+            const svgHeight = containerRect.height + 80;
+
+            svg.style.width = svgWidth + 'px';
+            svg.style.height = svgHeight + 'px';
+
+            const origViewBox = { x: 1658, y: 663, width: 1702, height: 1922 };
+            const scaleX = svgWidth / origViewBox.width;
+            const scaleY = svgHeight / origViewBox.height;
+
+            svg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+
+            const pathEl = document.createElementNS(svgNS, 'path');
+            pathEl.setAttribute('d', cloudPath);
+            pathEl.setAttribute('fill', 'none');
+            svg.appendChild(pathEl);
+
+            const pathLength = pathEl.getTotalLength();
+
+            function transformPoint(x, y) {
+                return {
+                    x: (x - origViewBox.x) * scaleX,
+                    y: (y - origViewBox.y) * scaleY
+                };
+            }
+
+            const perimeter = 2 * (svgWidth + svgHeight);
+            const numCircles = Math.round(perimeter / 10);
+            const baseRadius = 18;
+            const waveFrequency = 10;
+            const waveAmplitude = 12 * Math.min(scaleX, scaleY);
+
+            // Create wave fill
+            const wavePoints = [];
+            for (let i = 0; i < numCircles; i++) {
+                const t = i / numCircles;
+                const point = pathEl.getPointAtLength(t * pathLength);
+                const nextPoint = pathEl.getPointAtLength(Math.min(t + 0.001, 1) * pathLength);
+                const dx = nextPoint.x - point.x;
+                const dy = nextPoint.y - point.y;
+                const len = Math.sqrt(dx * dx + dy * dy) || 1;
+                const normalX = dy / len;
+                const normalY = -dx / len;
+                const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
+                wavePoints.push(transformPoint(point.x + normalX * waveOffset, point.y + normalY * waveOffset));
+            }
+
+            let waveFillD = `M${wavePoints[0].x},${wavePoints[0].y}`;
+            for (let i = 1; i < wavePoints.length; i++) {
+                const prev = wavePoints[i - 1];
+                const curr = wavePoints[i];
+                waveFillD += ` Q${prev.x},${prev.y} ${(prev.x + curr.x) / 2},${(prev.y + curr.y) / 2}`;
+            }
+            waveFillD += ` Z`;
+
+            const waveFillPath = document.createElementNS(svgNS, 'path');
+            waveFillPath.setAttribute('d', waveFillD);
+            waveFillPath.setAttribute('fill', 'white');
+            svg.appendChild(waveFillPath);
+
+            // Add circles
+            for (let i = 0; i < numCircles; i++) {
+                const t = i / numCircles;
+                const point = pathEl.getPointAtLength(t * pathLength);
+                const nextPoint = pathEl.getPointAtLength(Math.min(t + 0.001, 1) * pathLength);
+                const dx = nextPoint.x - point.x;
+                const dy = nextPoint.y - point.y;
+                const len = Math.sqrt(dx * dx + dy * dy) || 1;
+                const normalX = dy / len;
+                const normalY = -dx / len;
+                const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
+                const transformed = transformPoint(point.x + normalX * waveOffset, point.y + normalY * waveOffset);
+                const radius = baseRadius + (Math.random() - 0.5) * 10;
+
+                const circle = document.createElementNS(svgNS, 'circle');
+                circle.setAttribute('cx', transformed.x);
+                circle.setAttribute('cy', transformed.y);
+                circle.setAttribute('r', radius);
+                circle.setAttribute('fill', 'white');
+                svg.appendChild(circle);
+            }
+
+            svg.removeChild(pathEl);
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(initCloudBorder, 100);
+        });
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
