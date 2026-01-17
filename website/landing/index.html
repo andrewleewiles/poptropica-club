@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200, initial-scale=0.3, maximum-scale=3, user-scalable=yes">
     <title>Messy Sinker's Poptropica Club</title>
     <meta name="description" content="Welcome to Poptropica Club! Download Poptropica Legacy, join our community, and explore the islands.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4055787725414950" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="page-wrapper">
@@ -66,7 +67,7 @@
                                 <img src="buttons/blogButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
 
-                            <a href="#" class="nav-button" id="btn-island" target="_blank">
+                            <a href="https://poptropica.wiki/index.php/Category:Island_Guides" class="nav-button" id="btn-island" target="_blank">
                                 <img src="buttons/islandButton.png" alt="Island Help" class="btn-normal">
                                 <img src="buttons/islandButtonHover.png" alt="" class="btn-hover" aria-hidden="true">
                             </a>
@@ -241,9 +242,12 @@
 
     <script>
         // Dynamic Cloud Border - loads path from cloudPath.svg
+        // Uses 3-zone vertical scaling: top 20% and bottom 20% maintain aspect ratio,
+        // only the middle 60% stretches vertically
         (async function() {
             const svgNS = "http://www.w3.org/2000/svg";
             const svg = document.querySelector('.cloud-border-svg');
+            if (!svg) return;
 
             // Fetch the cloudPath.svg and extract the path data
             const response = await fetch('shared/cloudPath.svg');
@@ -252,17 +256,37 @@
             const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
             const cloudPath = svgDoc.querySelector('path').getAttribute('d');
 
-            // Get container dimensions
-            const container = document.querySelector('.cloud-container');
-            const rect = container.getBoundingClientRect();
+            // Get actual SVG dimensions after CSS is applied
+            const svgRect = svg.getBoundingClientRect();
+            const svgWidth = svgRect.width;
+            const svgHeight = svgRect.height;
 
-            // Set viewBox to focus on the path area (path spans roughly x:1758-3260, y:763-2485)
-            svg.setAttribute('viewBox', '1658 663 1702 1922');
-            svg.setAttribute('preserveAspectRatio', 'none');
+            // Original path bounds (from cloudPath.svg viewBox area)
+            const origViewBox = { x: 1658, y: 663, width: 1702, height: 1922 };
 
-            // We'll create a sine-wave fill path after calculating all the points
+            // 3-zone vertical scaling: top 20% and bottom 20% maintain aspect ratio
+            // Only the middle 60% stretches vertically
+            const topSliceRatio = 0.20;
+            const bottomSliceRatio = 0.20;
+            const topSliceHeight = origViewBox.height * topSliceRatio;
+            const bottomSliceHeight = origViewBox.height * bottomSliceRatio;
+            const origMiddleHeight = origViewBox.height * (1 - topSliceRatio - bottomSliceRatio);
 
-            // Create a path element to sample points from for circles
+            // Calculate scale factors
+            const scaleX = svgWidth / origViewBox.width;
+            // Top/bottom scale uniformly with X to maintain aspect ratio
+            const fixedTopHeight = topSliceHeight * scaleX;
+            const fixedBottomHeight = bottomSliceHeight * scaleX;
+            const stretchedMiddleHeight = Math.max(0, svgHeight - fixedTopHeight - fixedBottomHeight);
+
+            // Check if we have room for the middle section
+            const useThreeZone = stretchedMiddleHeight > 0;
+            const scaleY = svgHeight / origViewBox.height; // Fallback uniform scale
+
+            // Set viewBox to match actual SVG size (1:1 pixel mapping, no stretching)
+            svg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+
+            // Create a hidden path element to sample points from (in original coordinates)
             const pathEl = document.createElementNS(svgNS, 'path');
             pathEl.setAttribute('d', cloudPath);
             pathEl.setAttribute('fill', 'none');
@@ -271,22 +295,52 @@
             // Get total path length
             const pathLength = pathEl.getTotalLength();
 
-            // Generate circles along the path - smaller, denser for scalloped cloud look
+            // Transform function: 3-zone vertical scaling
+            // Top 20% and bottom 20% maintain aspect ratio, middle 60% stretches
+            function transformPoint(x, y) {
+                const newX = (x - origViewBox.x) * scaleX;
+
+                if (!useThreeZone) {
+                    // Fallback: uniform scaling
+                    return { x: newX, y: (y - origViewBox.y) * scaleY };
+                }
+
+                const localY = y - origViewBox.y; // Y relative to path top
+                let newY;
+
+                if (localY < topSliceHeight) {
+                    // Top 20%: scale uniformly with X
+                    newY = localY * scaleX;
+                } else if (localY > origViewBox.height - bottomSliceHeight) {
+                    // Bottom 20%: scale uniformly, anchor to bottom
+                    const fromBottom = origViewBox.height - localY;
+                    newY = svgHeight - (fromBottom * scaleX);
+                } else {
+                    // Middle 60%: stretch to fill remaining space
+                    const middleLocalY = localY - topSliceHeight;
+                    const middleRatio = middleLocalY / origMiddleHeight;
+                    newY = fixedTopHeight + (middleRatio * stretchedMiddleHeight);
+                }
+
+                return { x: newX, y: newY };
+            }
+
+            // Generate circles along the path
             const circles = [];
             const numCircles = 200;
-            const baseRadius = 28;
-            const radiusVariation = 16;
+            const baseRadius = 20;
+            const radiusVariation = 10;
 
             // Sine wave parameters for wavy cloud edge
-            const waveFrequency = 12; // Number of waves around the path
-            const waveAmplitude = 20; // How far circles bulge in/out
+            const waveFrequency = 12;
+            const waveAmplitude = 20 * Math.min(scaleX, scaleY); // Scale wave amplitude
 
             // Corner positions (approximate t values)
             const corners = [0, 0.25, 0.5, 0.75];
-            const cornerRadius = 0.06; // How wide the corner zone is
-            const cornerSizeBoost = 1.4; // How much larger corner circles are
+            const cornerRadius = 0.06;
+            const cornerSizeBoost = 1.4;
 
-            // Function to get corner proximity factor (0 = not near corner, 1 = at corner)
+            // Function to get corner proximity factor
             function getCornerFactor(t) {
                 let maxFactor = 0;
                 for (const corner of corners) {
@@ -301,7 +355,7 @@
 
             // First pass: calculate all wave points for the fill path
             const wavePoints = [];
-            const fillResolution = 200; // More points for smooth fill path
+            const fillResolution = 200;
             for (let i = 0; i < fillResolution; i++) {
                 const t = i / fillResolution;
                 const point = pathEl.getPointAtLength(t * pathLength);
@@ -317,10 +371,12 @@
                 const normalY = -dx / len;
 
                 const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
-                wavePoints.push({
-                    x: point.x + normalX * waveOffset,
-                    y: point.y + normalY * waveOffset
-                });
+                const waveX = point.x + normalX * waveOffset;
+                const waveY = point.y + normalY * waveOffset;
+
+                // Transform to container coordinates
+                const transformed = transformPoint(waveX, waveY);
+                wavePoints.push(transformed);
             }
 
             // Create smooth curved fill path using quadratic bezier curves
@@ -332,7 +388,6 @@
                 const midY = (prev.y + curr.y) / 2;
                 waveFillD += ` Q${prev.x},${prev.y} ${midX},${midY}`;
             }
-            // Close with final curve
             const last = wavePoints[wavePoints.length - 1];
             const first = wavePoints[0];
             waveFillD += ` Q${last.x},${last.y} ${first.x},${first.y} Z`;
@@ -342,42 +397,38 @@
             waveFillPath.setAttribute('fill', 'white');
             svg.appendChild(waveFillPath);
 
-            // Second pass: create circles along the wave path
+            // Second pass: create circles along the wave path (transformed coordinates)
             for (let i = 0; i < numCircles; i++) {
                 const t = i / numCircles;
                 const point = pathEl.getPointAtLength(t * pathLength);
 
-                // Get nearby point to calculate normal direction
                 const nextT = Math.min(t + 0.001, 1);
                 const nextPoint = pathEl.getPointAtLength(nextT * pathLength);
 
-                // Calculate tangent and normal
                 const dx = nextPoint.x - point.x;
                 const dy = nextPoint.y - point.y;
                 const len = Math.sqrt(dx * dx + dy * dy) || 1;
 
-                // Normal is perpendicular to tangent (pointing outward)
                 const normalX = dy / len;
                 const normalY = -dx / len;
 
-                // Apply sine wave offset along normal
                 const waveOffset = Math.sin(t * Math.PI * 2 * waveFrequency) * waveAmplitude;
-                const finalX = point.x + normalX * waveOffset;
-                const finalY = point.y + normalY * waveOffset;
+                const waveX = point.x + normalX * waveOffset;
+                const waveY = point.y + normalY * waveOffset;
 
-                // Make circles larger near corners
+                // Transform to container coordinates
+                const transformed = transformPoint(waveX, waveY);
+
                 const cornerFactor = getCornerFactor(t);
                 const sizeMultiplier = 1 + (cornerSizeBoost - 1) * cornerFactor;
                 const radius = (baseRadius + (Math.random() - 0.5) * radiusVariation * 2) * sizeMultiplier;
 
-                // Create circle element at wave-offset position
                 const circle = document.createElementNS(svgNS, 'circle');
-                circle.setAttribute('cx', finalX);
-                circle.setAttribute('cy', finalY);
+                circle.setAttribute('cx', transformed.x);
+                circle.setAttribute('cy', transformed.y);
                 circle.setAttribute('r', radius);
                 circle.setAttribute('fill', 'white');
 
-                // Store animation data
                 circles.push({
                     el: circle,
                     baseRadius: radius,
@@ -389,18 +440,22 @@
                 svg.appendChild(circle);
             }
 
-            // Remove the path (keep circles)
+            // Remove the path element
             svg.removeChild(pathEl);
 
-            // Animate circles with persistent scale jitter
-            function animateCircles(time) {
-                circles.forEach(c => {
-                    const jitter = 1 + Math.sin(time * 0.001 * c.speed + c.phase) * c.jitterAmount;
-                    c.el.setAttribute('r', c.baseRadius * jitter);
-                });
+            // Animate circles with persistent scale jitter (desktop only)
+            const isMobile = window.screen.width < 1024;
+
+            if (!isMobile) {
+                function animateCircles(time) {
+                    circles.forEach(c => {
+                        const jitter = 1 + Math.sin(time * 0.001 * c.speed + c.phase) * c.jitterAmount;
+                        c.el.setAttribute('r', c.baseRadius * jitter);
+                    });
+                    requestAnimationFrame(animateCircles);
+                }
                 requestAnimationFrame(animateCircles);
             }
-            requestAnimationFrame(animateCircles);
         })();
 
         // Load SVG and set up mouse avoidance
@@ -1216,9 +1271,16 @@
             try {
                 const user = JSON.parse(userJson);
                 if (user && user.username) {
+                    // Update login link
                     const loginLink = document.querySelector('.login-link');
                     loginLink.href = 'https://poptropica.club/passport/';
                     loginLink.querySelector('span').textContent = `LOGGED IN AS ${user.username.toUpperCase()}`;
+
+                    // Redirect "Join the Club" to passport if logged in
+                    const joinBtn = document.getElementById('btn-join');
+                    if (joinBtn) {
+                        joinBtn.href = 'https://poptropica.club/passport/';
+                    }
                 }
             } catch (error) {
                 console.error('Failed to parse user data:', error);
